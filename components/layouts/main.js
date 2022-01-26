@@ -1,18 +1,18 @@
 import Head from 'next/head'
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 import NavBar from '../navbar'
 import { Box, Container } from '@chakra-ui/react'
 import Footer from '../footer'
-import VoxelDogLoader from '../voxel-dog-loader'
+// import VoxelDogLoader from '../voxel-dog-loader'
 
-const LazyVoxelDog = dynamic(() => import('../voxel-dog'), {
-  ssr: false,
-  loading: () => <VoxelDogLoader />
-})
+// const LazyVoxelDog = dynamic(() => import('../voxel-dog'), {
+//   ssr: false,
+//   loading: () => <VoxelDogLoader />
+// })
 
 const Main = ({ children, router }) => {
   return (
-    <Box as="main" pb={8}>
+    <Box as="main" pb={8} border="8px">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Takuya's homepage" />
@@ -27,13 +27,13 @@ const Main = ({ children, router }) => {
         <meta property="og:site_name" content="Takuya Matsuyama's Homepage" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/card.png" />
-        <title>Takuya Matsuyama - Homepage</title>
+        <title>Sumoduduk - NFT Minter</title>
       </Head>
 
       <NavBar path={router.asPath} />
 
-      <Container maxW="container.md" pt={14}>
-        <LazyVoxelDog />
+      <Container pt={20} border="8px" mt={16} maxW="1200px" borderRadius={30}>
+        <Box>{/* <LazyVoxelDog /> */}</Box>
 
         {children}
 

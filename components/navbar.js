@@ -5,6 +5,7 @@ import {
   Box,
   Link,
   Stack,
+  Spacer,
   Heading,
   Flex,
   Menu,
@@ -42,6 +43,7 @@ const Navbar = props => {
   return (
     <Box
       position="fixed"
+      maxW="full"
       as="nav"
       w="100%"
       bg={useColorModeValue('#ffffff40', '#20202380')}
@@ -71,6 +73,7 @@ const Navbar = props => {
           flexGrow={1}
           mt={{ base: 4, md: 0 }}
         >
+          <Spacer />
           <LinkItem href="/works" path={path}>
             Works
           </LinkItem>

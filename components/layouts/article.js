@@ -3,19 +3,24 @@ import Head from 'next/head'
 import { GridItemStyle } from '../grid-item'
 
 const variants = {
-  hidden: { opacity: 0, x: 0, y: 20 },
-  enter: { opacity: 1, x: 0, y: 0 },
-  exit: { opacity: 0, x: -0, y: 20 }
+  initial: {
+    clipPath: 'polygon(0 0, 0 0, 0 100%, 0% 100%)' //NIEWIDOCZNY LEWO
+  },
+  animate: {
+    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
+  },
+  exit: {
+    clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' //NIEWIDOCZNY PRAWO
+  }
 }
 
 const Layout = ({ children, title }) => (
   <motion.article
-    initial="hidden"
-    animate="enter"
-    exit="exit"
     variants={variants}
-    transition={{ duration: 0.4, type: 'easeInOut' }}
-    style={{ position: 'relative' }}
+    initial="initial"
+    animate="animate"
+    exit="exit"
+    transition={{ duration: 0.7 }}
   >
     <>
       {title && (

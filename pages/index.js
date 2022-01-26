@@ -24,7 +24,7 @@ import thumbInkdrop from '../public/images/works/inkdrop_eyecatch.png'
 
 const Home = () => (
   <Layout>
-    <Container>
+    <Container maxW="full">
       <Box
         borderRadius="lg"
         mb={6}

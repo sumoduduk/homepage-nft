@@ -5,12 +5,12 @@ import styled from '@emotion/styled'
 
 const LogoBox = styled.span`
   font-weight: bold;
-  font-size: 18px;
+  font-size: 25px;
   display: inline-flex;
   align-items: center;
   height: 30px;
   line-height: 20px;
-  padding: 10px;
+  grid-gap: 10px;
 
   img {
     transition: 200ms ease;
@@ -28,14 +28,14 @@ const Logo = () => {
     <Link href="/">
       <a>
         <LogoBox>
-          <Image src={footPrintImg} width={20} height={20} alt="logo" />
+          <Image src={footPrintImg} width={20} height={20} mr={5} alt="logo" />
           <Text
             color={useColorModeValue('gray.800', 'whiteAlpha.900')}
             fontFamily='M PLUS Rounded 1c", sans-serif'
             fontWeight="bold"
             ml={3}
           >
-            Takuya Matsuyama
+            Sumoduduk - NFT Minter
           </Text>
         </LogoBox>
       </a>
