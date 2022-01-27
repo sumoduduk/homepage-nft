@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {
   Flex,
+  Button,
   Text,
   IconButton,
   Divider,
@@ -11,16 +12,22 @@ import {
   FiMenu,
   FiHome,
   FiCalendar,
-  FiUser,
   FiDollarSign,
-  FiBriefcase,
-  FiSettings
+  FiBriefcase
 } from 'react-icons/fi'
-import { IoPawOutline } from 'react-icons/io5'
-import NavItem from '../components/NavItem'
+import NavItem from './NavItem'
+import router from 'next/router'
+import { useMoralis } from 'react-moralis'
 
 export default function Sidebar() {
   const [navSize, changeNavSize] = useState('large')
+  const { logout } = useMoralis()
+
+  async function logOut() {
+    await logout()
+    router.push('/')
+  }
+
   return (
     <Flex
       pos="sticky"
@@ -51,17 +58,32 @@ export default function Sidebar() {
           }}
         />
         <NavItem
+          as="a"
           navSize={navSize}
           icon={FiHome}
           title="Dashboard"
+          href="/Dashboard"
           description="This is the description for the dashboard."
+          onClick={() => router.push('/Dashboard')}
         />
-        <NavItem navSize={navSize} icon={FiCalendar} title="Calendar" active />
-        <NavItem navSize={navSize} icon={FiUser} title="Clients" />
-        <NavItem navSize={navSize} icon={IoPawOutline} title="Animals" />
-        <NavItem navSize={navSize} icon={FiDollarSign} title="Stocks" />
-        <NavItem navSize={navSize} icon={FiBriefcase} title="Reports" />
-        <NavItem navSize={navSize} icon={FiSettings} title="Settings" />
+        <NavItem
+          navSize={navSize}
+          icon={FiDollarSign}
+          title="Mint"
+          onClick={() => router.push('/Mint')}
+        />
+        <NavItem
+          navSize={navSize}
+          icon={FiBriefcase}
+          title="Balance"
+          onClick={() => router.push('/Balance')}
+        />
+        <NavItem
+          navSize={navSize}
+          icon={FiCalendar}
+          title="Reward"
+          onClick={() => router.push('/Reward')}
+        />
       </Flex>
 
       <Flex
@@ -80,9 +102,10 @@ export default function Sidebar() {
             display={navSize == 'small' ? 'none' : 'flex'}
           >
             <Heading as="h3" size="sm">
-              Sylwia Weller
+              Sumo Duduk
             </Heading>
             <Text color="gray">Admin</Text>
+            <Button onClick={() => logOut()}>Log Out</Button>
           </Flex>
         </Flex>
       </Flex>

@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion'
+import Sidebar from './sidebar'
+
+const AnimeSideBar = motion(Sidebar)
 
 const variants = {
   initial: {
@@ -12,16 +15,14 @@ const variants = {
   }
 }
 
-const AnimateSideBar = children => (
-  <motion.article
-    variants={variants}
-    initial="initial"
-    animate="animate"
-    exit="exit"
-    transition={{ duration: 0.7 }}
-  >
-    {children}
-  </motion.article>
-)
-
-export default AnimateSideBar
+export default function Example() {
+  return (
+    <AnimeSideBar
+      variants={variants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ duration: 0.7 }}
+    />
+  )
+}
