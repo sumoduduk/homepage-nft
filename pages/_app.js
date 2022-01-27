@@ -2,6 +2,7 @@ import Layout from '../components/layouts/main'
 import Fonts from '../components/fonts'
 import { AnimatePresence } from 'framer-motion'
 import Chakra from '../components/chakra'
+import NFT from '../components/NFT'
 
 function Website({ Component, pageProps, router }) {
   return (
@@ -9,7 +10,9 @@ function Website({ Component, pageProps, router }) {
       <Fonts />
       <Layout router={router}>
         <AnimatePresence exitBeforeEnter initial={false}>
-          <Component {...pageProps} key={router.route} />
+          <NFT>
+            <Component {...pageProps} key={router.route} />
+          </NFT>
         </AnimatePresence>
       </Layout>
     </Chakra>

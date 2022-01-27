@@ -1,6 +1,4 @@
 import { motion } from 'framer-motion'
-import Head from 'next/head'
-import { GridItemStyle } from '../grid-item'
 
 const variants = {
   initial: {
@@ -14,7 +12,7 @@ const variants = {
   }
 }
 
-const Layout = ({ children, title }) => (
+const AnimateSideBar = children => (
   <motion.article
     variants={variants}
     initial="initial"
@@ -22,19 +20,8 @@ const Layout = ({ children, title }) => (
     exit="exit"
     transition={{ duration: 0.7 }}
   >
-    <>
-      {title && (
-        <Head>
-          <title>{title} - SumoDuduk</title>
-          <meta name="twitter:title" content={title} />
-          <meta property="og:title" content={title} />
-        </Head>
-      )}
-      {children}
-
-      <GridItemStyle />
-    </>
+    {children}
   </motion.article>
 )
 
-export default Layout
+export default AnimateSideBar
