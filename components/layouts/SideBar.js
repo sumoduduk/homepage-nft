@@ -5,8 +5,7 @@ import {
   Text,
   IconButton,
   Divider,
-  Avatar,
-  Heading
+  Link
 } from '@chakra-ui/react'
 import {
   FiMenu,
@@ -19,7 +18,7 @@ import NavItem from './NavItem'
 import router from 'next/router'
 import { useMoralis } from 'react-moralis'
 
-export default function Sidebar() {
+export default function Sidebar({title}) {
   const [navSize, changeNavSize] = useState('large')
   const { logout } = useMoralis()
 
@@ -58,31 +57,34 @@ export default function Sidebar() {
           }}
         />
         <NavItem
-          as="a"
+          as= {Link}
           navSize={navSize}
           icon={FiHome}
           title="Dashboard"
-          href="/Dashboard"
-          description="This is the description for the dashboard."
-          onClick={() => router.push('/Dashboard')}
-        />
+          href="Dashboard"
+          description="This is the description for the dashboard." />
         <NavItem
+          as ={Link}
           navSize={navSize}
           icon={FiDollarSign}
           title="Mint"
-          onClick={() => router.push('/Mint')}
-        />
+          href="/Mint"
+          />
         <NavItem
+          as={Link}
           navSize={navSize}
           icon={FiBriefcase}
           title="Balance"
-          onClick={() => router.push('/Balance')}
+          href="/Balance"
+
         />
         <NavItem
+          as={Link}
           navSize={navSize}
           icon={FiCalendar}
           title="Reward"
-          onClick={() => router.push('/Reward')}
+          href="/Reward"
+
         />
       </Flex>
 
@@ -95,16 +97,12 @@ export default function Sidebar() {
       >
         <Divider display={navSize == 'small' ? 'none' : 'flex'} />
         <Flex mt={4} align="center">
-          <Avatar size="sm" src="avatar-1.jpg" />
+        <Text color="gray">Admin</Text>
           <Flex
             flexDir="column"
             ml={4}
             display={navSize == 'small' ? 'none' : 'flex'}
           >
-            <Heading as="h3" size="sm">
-              Sumo Duduk
-            </Heading>
-            <Text color="gray">Admin</Text>
             <Button onClick={() => logOut()}>Log Out</Button>
           </Flex>
         </Flex>

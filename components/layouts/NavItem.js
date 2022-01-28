@@ -9,8 +9,9 @@ import {
   MenuList
 } from '@chakra-ui/react'
 import NavHoverBox from './NavHoverBox'
+import NextLink from 'next/link'
 
-export default function NavItem({ icon, title, description, active, navSize }) {
+export default function NavItem({ icon, title, description, href, path, navSize, active}) {
   return (
     <Flex
       mt={30}
@@ -19,12 +20,14 @@ export default function NavItem({ icon, title, description, active, navSize }) {
       alignItems={navSize == 'small' ? 'center' : 'flex-start'}
     >
       <Menu placement="right">
+        <NextLink href={href} passHref>
         <Link
           backgroundColor={active && '#AEC8CA'}
           p={3}
           borderRadius={8}
           _hover={{ textDecor: 'none', backgroundColor: '#AEC8CA' }}
           w={navSize == 'large' && '100%'}
+          path={path}
         >
           <MenuButton w="100%">
             <Flex>
@@ -38,7 +41,7 @@ export default function NavItem({ icon, title, description, active, navSize }) {
               </Text>
             </Flex>
           </MenuButton>
-        </Link>
+        </Link></NextLink>
         <MenuList py={0} border="none" w={200} h={200} ml={5}>
           <NavHoverBox title={title} icon={icon} description={description} />
         </MenuList>

@@ -1,13 +1,16 @@
 import { Flex, Heading } from '@chakra-ui/react'
-import AnimeSideBar from '../components/layouts/animateSidebar'
+import SideBar from '../components/layouts/SideBar'
+import Layout from '../components/layouts/article'
+
 
 const Dashboard = () => {
   return (
+    <Layout title="Dashboard">
     <Flex>
-      <AnimeSideBar>
+      <SideBar/>
         <Heading>Hello</Heading>
-      </AnimeSideBar>
     </Flex>
+    </Layout>
   )
 }
 

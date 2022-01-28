@@ -9,7 +9,7 @@ function Website({ Component, pageProps, router }) {
     <Chakra cookies={pageProps.cookies}>
       <Fonts />
       <Layout router={router}>
-        <AnimatePresence exitBeforeEnter initial={false}>
+        <AnimatePresence exitBeforeEnter initial={true}>
           <NFT>
             <Component {...pageProps} key={router.route} />
           </NFT>
