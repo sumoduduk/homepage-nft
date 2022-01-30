@@ -1,4 +1,11 @@
-import { Box, Container, Flex, Heading } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Image,
+  SimpleGrid
+} from '@chakra-ui/react'
 import Sidebar from '../components/layouts/sidebar'
 import { address, abi } from '../lib/abi'
 import { ethers } from 'ethers'
@@ -28,7 +35,9 @@ const Balance = () => {
     const items = await Promise.all(
       data.map(async i => {
         const tokenUri = await contract.tokenURI(i.id)
-        const metaData = await axios.get(tokenUri)
+        const metaData = await axios.get(
+          `https://cors-anywhere.herokuapp.com/${tokenUri}`
+        )
         const epoch = i.timeIssued.toNumber
         const epochNumeber = epoch * 1000
         const date = new Date(epochNumeber).toLocaleString()
@@ -40,6 +49,7 @@ const Balance = () => {
           nftCreated: date,
           image: metaData.data.image
         }
+
         return item
       })
     )
@@ -57,9 +67,15 @@ const Balance = () => {
           </Box>
           <Container>
             {nfts.map((nft, i) => (
-              <Box key={i}>
-                <Image src={nft.image} />
-              </Box>
+              <SimpleGrid key={i} columns={[1, 1, 2]} gap={6}>
+                <Box>
+                  <Image
+                    src={`https://ipfs.moralis.io:2053/ipfs/${nft.image.slice(
+                      21
+                    )}`}
+                  />
+                </Box>
+              </SimpleGrid>
             ))}
           </Container>
         </Flex>
