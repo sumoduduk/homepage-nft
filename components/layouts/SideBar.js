@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Flex,
-  Button,
-  Text,
-  IconButton,
-  Divider,
-  Link
-} from '@chakra-ui/react'
+import { Flex, Button, Text, IconButton, Divider, Link } from '@chakra-ui/react'
 import {
   FiMenu,
   FiHome,
@@ -17,12 +10,15 @@ import {
 import NavItem from './NavItem'
 import router from 'next/router'
 import { useMoralis } from 'react-moralis'
+import Web3Modal from 'web3modal'
 
-export default function Sidebar({title}) {
+export default function Sidebar({ title }) {
   const [navSize, changeNavSize] = useState('large')
   const { logout } = useMoralis()
 
   async function logOut() {
+    const web3Modal = new Web3Modal()
+    web3Modal.clearCachedProvider()
     await logout()
     router.push('/')
   }
@@ -57,26 +53,26 @@ export default function Sidebar({title}) {
           }}
         />
         <NavItem
-          as= {Link}
+          as={Link}
           navSize={navSize}
           icon={FiHome}
           title="Dashboard"
-          href="Dashboard"
-          description="This is the description for the dashboard." />
+          href="/Dashboard"
+          description="This is the description for the dashboard."
+        />
         <NavItem
-          as ={Link}
+          as={Link}
           navSize={navSize}
           icon={FiDollarSign}
           title="Mint"
           href="/Mint"
-          />
+        />
         <NavItem
           as={Link}
           navSize={navSize}
           icon={FiBriefcase}
-          title="Balance"
+          title="Collection"
           href="/Balance"
-
         />
         <NavItem
           as={Link}
@@ -84,7 +80,6 @@ export default function Sidebar({title}) {
           icon={FiCalendar}
           title="Reward"
           href="/Reward"
-
         />
       </Flex>
 
@@ -97,7 +92,7 @@ export default function Sidebar({title}) {
       >
         <Divider display={navSize == 'small' ? 'none' : 'flex'} />
         <Flex mt={4} align="center">
-        <Text color="gray">Admin</Text>
+          <Text color="gray">Admin</Text>
           <Flex
             flexDir="column"
             ml={4}
