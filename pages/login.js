@@ -4,7 +4,7 @@ import { Box, Button, Container, useColorModeValue } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import WalletLink from 'walletlink'
-import Router from 'next/router'
+import router from 'next/router'
 import Layout from '../components/layouts/article'
 import VoxelDogLoader from '../components/voxel-dog'
 import dynamic from 'next/dynamic'
@@ -42,24 +42,10 @@ const Login = () => {
   const login = async () => {
     const init = new Web3Modal({ cacheProvider: false, providerOptions })
 
-    const connection = await init.connect(
-      ress => {
-        const provider = new ethers.providers.Web3Provider(connection)
-        const signer = provider.getSigner()
-        const user = signer.getAddress(
-          ress => {
-            console.log(user)
-          },
-          err => {
-            console.log('error', err)
-          }
-        )
-      },
-      err => {
-        console.log('error', err)
-      }
-    )
-    Router.push('/Dashboard')
+    const connection = await init.connect()
+
+    const provider = new ethers.providers.Web3Provider(connection)
+    router.push('/Dashboard')
   }
 
   return (

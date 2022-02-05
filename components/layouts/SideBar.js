@@ -20,7 +20,7 @@ import router from 'next/router'
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 
-export default function Sidebar({ address, blockExp }) {
+export default function Sidebar() {
   const [navSize, changeNavSize] = useState('large')
 
   const [addr, setAddress] = useState('')
@@ -37,6 +37,9 @@ export default function Sidebar({ address, blockExp }) {
     connection.on('chainChanged', async chainId => {
       setChain(chainId)
       router.reload()
+    })
+    connection.on('disconnect', async () => {
+      setAddress(null)
     })
   }
 
@@ -56,11 +59,13 @@ export default function Sidebar({ address, blockExp }) {
 
   useEffect(() => {
     userChain()
+    !addr ?? router.push('/login')
   }, [])
 
   function logOut() {
     const web3Modal = new Web3Modal()
     web3Modal.clearCachedProvider()
+    setAddress(null || undefined)
     router.push('/')
   }
 
