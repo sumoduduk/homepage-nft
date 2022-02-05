@@ -21,6 +21,14 @@ export const GridItem = ({ children, href, title, thumbnail }) => (
   </Box>
 )
 
+export const GridNft = ({ title, thumbnail, id }) => (
+  <Box w="100%" textAlign="center">
+    <Image src={thumbnail} alt={title} className="grid-item-thumbnail" />
+
+    <Text mt={2}>{id}</Text>
+  </Box>
+)
+
 export const WorkGridItem = ({ children, id, title, thumbnail }) => (
   <Box w="100%" textAlign="center">
     <NextLink href={`/works/${id}`}>

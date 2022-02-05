@@ -4,7 +4,7 @@ import { Box, Button, Container, useColorModeValue } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import WalletLink from 'walletlink'
-import router from 'next/router'
+import Router from 'next/router'
 import Layout from '../components/layouts/article'
 import VoxelDogLoader from '../components/voxel-dog'
 import dynamic from 'next/dynamic'
@@ -59,7 +59,7 @@ const Login = () => {
         console.log('error', err)
       }
     )
-    router.push('/Dashboard')
+    Router.push('/Dashboard')
   }
 
   return (

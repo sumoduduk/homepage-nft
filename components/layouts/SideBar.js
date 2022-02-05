@@ -11,8 +11,9 @@ import NavItem from './NavItem'
 import router from 'next/router'
 import { useMoralis } from 'react-moralis'
 import Web3Modal from 'web3modal'
+import Address from '../helpers/Address'
 
-export default function Sidebar({ title }) {
+export default function Sidebar({ address, blockExp }) {
   const [navSize, changeNavSize] = useState('large')
   const { logout } = useMoralis()
 
@@ -92,7 +93,7 @@ export default function Sidebar({ title }) {
       >
         <Divider display={navSize == 'small' ? 'none' : 'flex'} />
         <Flex mt={4} align="center">
-          <Text color="gray">Admin</Text>
+          <Address address={address} blockexp={blockExp} />
           <Flex
             flexDir="column"
             ml={4}
