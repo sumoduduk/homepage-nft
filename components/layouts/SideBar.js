@@ -1,5 +1,13 @@
-import React, { useState } from 'react'
-import { Flex, Button, Text, IconButton, Divider, Link } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import {
+  Flex,
+  Button,
+  Text,
+  IconButton,
+  Divider,
+  Link,
+  Box
+} from '@chakra-ui/react'
 import {
   FiMenu,
   FiHome,
@@ -9,18 +17,50 @@ import {
 } from 'react-icons/fi'
 import NavItem from './NavItem'
 import router from 'next/router'
-import { useMoralis } from 'react-moralis'
 import Web3Modal from 'web3modal'
-import Address from '../helpers/Address'
+import { ethers } from 'ethers'
 
 export default function Sidebar({ address, blockExp }) {
   const [navSize, changeNavSize] = useState('large')
-  const { logout } = useMoralis()
 
-  async function logOut() {
+  const [addr, setAddress] = useState('')
+  const [chain, setChain] = useState('')
+
+  const subscribeProvider = async connection => {
+    if (!connection.on) {
+      return
+    }
+    connection.on('accountsChanged', async accounts => {
+      setAddress(accounts)
+      router.reload()
+    })
+    connection.on('chainChanged', async chainId => {
+      setChain(chainId)
+      router.reload()
+    })
+  }
+
+  const userChain = async () => {
+    const web3Modal = new Web3Modal()
+    const connection = await web3Modal.connect()
+    const provider = new ethers.providers.Web3Provider(connection)
+    const signer = provider.getSigner()
+    const userAddr = await signer.getAddress()
+    console.log(userAddr)
+    setAddress(userAddr)
+    const chains = await signer.getChainId()
+    setChain(chains)
+    await subscribeProvider(connection)
+    return connection
+  }
+
+  useEffect(() => {
+    userChain()
+  }, [])
+
+  function logOut() {
     const web3Modal = new Web3Modal()
     web3Modal.clearCachedProvider()
-    await logout()
     router.push('/')
   }
 
@@ -93,12 +133,18 @@ export default function Sidebar({ address, blockExp }) {
       >
         <Divider display={navSize == 'small' ? 'none' : 'flex'} />
         <Flex mt={4} align="center">
-          <Address address={address} blockexp={blockExp} />
           <Flex
             flexDir="column"
             ml={4}
             display={navSize == 'small' ? 'none' : 'flex'}
           >
+            <Box w={navSize == 'small' ? '75px' : '170px'}>
+              <Text isTruncated>{addr}</Text>
+            </Box>
+            <Box>
+              <Text isTruncated>{chain}</Text>
+            </Box>
+
             <Button onClick={() => logOut()}>Log Out</Button>
           </Flex>
         </Flex>

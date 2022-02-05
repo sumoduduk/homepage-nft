@@ -1,24 +1,4 @@
-import {
-  Box,
-  Container,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  List,
-  ListItem,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
-  Image
-} from '@chakra-ui/react'
+import { Box, Container, Divider, Flex, Heading } from '@chakra-ui/react'
 import Sidebar from '../components/layouts/SideBar'
 import { address, abi } from '../lib/abi'
 import { ethers } from 'ethers'
@@ -29,11 +9,12 @@ import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import pngegg from '../public/images/pngegg.png'
 // import Image from 'next/image'
+import NftModal from '../components/nftModal'
 
 const Balance = () => {
   const [nfts, setNfts] = useState([])
   //const [loadingState, setLoadingState] = useState('not-load')
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  // const [modal, setModal] = useState(false)
 
   useEffect(() => {
     loadAsset()
@@ -86,40 +67,14 @@ const Balance = () => {
             <Box my={12}>
               <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
                 {nfts.map((nft, i) => (
-                  <Box
-                    as="button"
-                    className="border shadow rounded-xl overflow-hidden hover:scale-110 transition ease-in-out delay-150 hover:-translate-y-1 hover:skew-y-2"
+                  <NftModal
+                    image={nft.image}
+                    name={nft.name}
+                    reward={nft.pendingReward}
+                    released={nft.rewardReleased}
+                    time={nft.nftCreated}
                     key={i}
-                    mx={2}
-                    my={4}
-                    size="md"
-                    onClick={onOpen}
-                  >
-                    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-                      <ModalContent>
-                        <ModalHeader>{nft.name}</ModalHeader>
-                        <ModalBody>
-                          <Box>
-                            <Image src={nft.image} />
-                          </Box>
-                          <Box>
-                            <UnorderedList spacing={3}>
-                              <ListItem>{nft.pendingReward}</ListItem>
-                              <ListItem>{nft.rewardReleased}</ListItem>
-                              <ListItem>{nft.nftCreated}</ListItem>
-                            </UnorderedList>
-                          </Box>
-                        </ModalBody>
-                        <ModalFooter>
-                          <Button colorScheme="blue" mr={3} onClick={onClose}>
-                            Close
-                          </Button>
-                          <Button variant="ghost">Secondary Action</Button>
-                        </ModalFooter>
-                      </ModalContent>
-                    </Modal>
-                    <Image src={pngegg} className="hover:skew-y-2" />
-                  </Box>
+                  />
                 ))}
               </Box>
             </Box>

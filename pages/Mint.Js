@@ -3,7 +3,7 @@ import {
   Flex,
   Heading,
   Container,
-  Image,
+  Img,
   Divider,
   IconButton,
   Button
@@ -25,8 +25,6 @@ const Mint = () => {
   )
   const url =
     'https://ipfs.moralis.io:2053/ipfs/QmSeGEb6y5dHbXvk2zV4M1rws77C4dDXFZvmdYgDrMjq7k'
-
-  useEffect(() => {}, [])
 
   const buy = async () => {
     const amounts = BigNumber.from(amount)
@@ -72,7 +70,12 @@ const Mint = () => {
               h={800}
               borderRadius={30}
             >
-              <Image mt={16} src={url} boxSize="xs" borderRadius="12px" />
+              <Img
+                mt={16}
+                src="images/pngegg.png"
+                boxSize="xs"
+                borderRadius="12px"
+              />
               <Box pt={12}>
                 <IconButton
                   m={6}
