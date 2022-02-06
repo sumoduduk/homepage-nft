@@ -1,4 +1,13 @@
-import { Box, Container, Divider, Flex, Heading } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  Divider,
+  Flex,
+  Heading,
+  Radio,
+  RadioGroup,
+  Stack
+} from '@chakra-ui/react'
 import Sidebar from '../components/layouts/SideBar'
 import { nftABI } from '../lib/abi'
 import { NFTAddress } from '../lib/contract'
@@ -13,11 +22,11 @@ import NftModal from '../components/nftModal'
 const Balance = () => {
   const [nfts, setNfts] = useState([])
   //const [loadingState, setLoadingState] = useState('not-load')
-  // const [modal, setModal] = useState(false)
+  const [reward, setReward] = useState(true)
 
   useEffect(() => {
     loadAsset()
-  }, [])
+  }, [reward])
 
   async function loadAsset() {
     const web3Modal = new Web3Modal()
@@ -27,6 +36,7 @@ const Balance = () => {
     const userAddr = signer.getAddress()
     const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
     const data = await contract.getAllNftDataOwned(userAddr)
+
     const items = await Promise.all(
       data.map(async i => {
         const tokenUri = await contract.tokenURI(i.id)
@@ -39,8 +49,14 @@ const Balance = () => {
 
         let item = {
           tokenId: i.id.toNumber(),
-          pendingReward: i.pendingReward.toNumber(),
-          rewardReleased: i.rewardReleased.toNumber(),
+          pendingReward: ethers.utils.formatUnits(
+            i.pendingReward.toString(),
+            'ether'
+          ),
+          rewardReleased: ethers.utils.formatUnits(
+            i.rewardReleased.toString(),
+            'ether'
+          ),
           nftCreated: date,
           image: metaData.data.image,
           name: metaData.data.name
@@ -73,6 +89,7 @@ const Balance = () => {
                     released={nft.rewardReleased}
                     time={nft.nftCreated}
                     key={i}
+                    nftId={nft.tokenId}
                   />
                 ))}
               </Box>

@@ -17,9 +17,25 @@ import {
   Img,
   useColorModeValue
 } from '@chakra-ui/react'
+import Web3Modal from 'web3modal'
+import { ethers } from 'ethers'
+import { NFTAddress } from '../lib/contract'
+import { nftABI } from '../lib/abi'
+import { useEffect } from 'react'
 
-const NftModal = ({ image, name, reward, released, time, _key }) => {
+const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  async function claimReward() {
+    const web3Modal = new Web3Modal()
+    const connection = await web3Modal.connect()
+    const provider = new ethers.providers.Web3Provider(connection)
+    const signer = provider.getSigner()
+    const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
+
+    const claim = await contract.claimRewardPerNft(nftId)
+    await claim.wait()
+  }
 
   return (
     <Box
@@ -38,17 +54,18 @@ const NftModal = ({ image, name, reward, released, time, _key }) => {
         onClose={onClose}
         isCentered
         motionPreset="slideInRight"
+        borderRadius="20px"
       >
         <ModalContent>
           <ModalHeader>{name}</ModalHeader>
           <ModalBody>
             <Box>
-              <Image src={image} />
+              <Image borderRadius="20px" src={image} />
             </Box>
             <Box>
               <UnorderedList spacing={3}>
-                <ListItem>Reward Hold : {reward}</ListItem>
-                <ListItem>Reward Released : {released}</ListItem>
+                <ListItem>Reward Hold : $ {reward}</ListItem>
+                <ListItem>Reward Released : $ {released}</ListItem>
                 <ListItem>NFT Created : {time}</ListItem>
               </UnorderedList>
             </Box>
@@ -57,8 +74,12 @@ const NftModal = ({ image, name, reward, released, time, _key }) => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost" colorScheme="blue">
-              Secondary Action
+            <Button
+              variant="ghost"
+              colorScheme="blue"
+              onClick={() => claimReward()}
+            >
+              Claim Reward
             </Button>
           </ModalFooter>
         </ModalContent>

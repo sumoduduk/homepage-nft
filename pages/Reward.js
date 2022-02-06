@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Layout from '../components/layouts/article'
 import Web3Modal from 'web3modal'
 import {ethers} from 'ethers'
-import { nftAbi } from '../lib/abi'
+import { nftABI } from '../lib/abi'
 import { NFTAddress } from '../lib/contract'
 import Sidebar from '../components/layouts/SideBar'
 import {
@@ -41,21 +41,21 @@ const Reward = () => {
     const sign =  await getSign()
     const addr = sign?.getAddress()
 
-    const nftContract = new ethers.Contract(NFTAddress, nftAbi.abi, sign)
+    const nftContract = new ethers.Contract(NFTAddress, nftABI.abi, sign)
     const _profit = await nftContract.viewPendingRewardPerAddress(addr)
-    const dollar = _profit.toNumber()
+    const dollar = ethers.utils.formatUnits(_profit.toString(), 'ether')
     
-    setProfit(currency(dollar))
+    setProfit(dollar)
   }
 
   async function getReleased() {
     const sign = await getSign()
     const addr = sign?.getAddress()
 
-    const nftContract = new ethers.Contract(NFTAddress, nftAbi.abi, sign)
+    const nftContract = new ethers.Contract(NFTAddress, nftABI.abi, sign)
     const _profit = await nftContract.TotalRewardReleasedPerAddress(addr)
-    const dollar = _profit.toNumber()
-    setProfitReleased(currency(dollar))
+    const dollar = ethers.utils.formatUnits(_profit.toString(), 'ether')
+    setProfitReleased(dollar)
   }
 
   return (
@@ -75,7 +75,7 @@ const Reward = () => {
                     <Heading alignSelf="center">NFT Reward</Heading>
                   </Box>
                   <Box justifyContent="center" border='4px' h='30%'>
-                    <Heading>{profit}</Heading>
+                    <Heading>$ {profit}</Heading>
                   </Box>
                   <Box justifyContent="center" border='4px'>
                     <Button
@@ -92,7 +92,7 @@ const Reward = () => {
                     <Heading alignSelf="center">NFT Total Reward</Heading>
                   </Box>
                   <Box  justifyContent="center">
-                    <Heading>{profitReleased}</Heading>
+                    <Heading> $ {profitReleased}</Heading>
                   </Box>
                   <Box justifyContent="center">
                     <Button
