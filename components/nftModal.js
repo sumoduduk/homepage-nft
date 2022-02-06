@@ -37,7 +37,7 @@ const NftModal = ({ image, name, reward, released, time, setOpen, _key }) => {
       size="md"
       onClick={onOpen}
     >
-      <Img src="images/pngegg.png" className="hover:skew-y-2" />
+      <Img src={image} className="hover:skew-y-2" />
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalContent>
           <ModalHeader>{name}</ModalHeader>
