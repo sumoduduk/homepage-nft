@@ -22,11 +22,11 @@ import NftModal from '../components/nftModal'
 const Balance = () => {
   const [nfts, setNfts] = useState([])
   //const [loadingState, setLoadingState] = useState('not-load')
-  const [reward, setReward] = useState(true)
+  // const [reward, setReward] = useState(true)
 
   useEffect(() => {
     loadAsset()
-  }, [reward])
+  }, [])
 
   async function loadAsset() {
     const web3Modal = new Web3Modal()
@@ -88,8 +88,8 @@ const Balance = () => {
                     reward={nft.pendingReward}
                     released={nft.rewardReleased}
                     time={nft.nftCreated}
-                    key={i}
                     nftId={nft.tokenId}
+                    key={i}
                   />
                 ))}
               </Box>

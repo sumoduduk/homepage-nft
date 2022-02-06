@@ -23,8 +23,23 @@ import { NFTAddress } from '../lib/contract'
 import { nftABI } from '../lib/abi'
 import { useEffect } from 'react'
 
-const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
+const NftModal = ({
+  image,
+  name,
+  reward,
+  released,
+  time,
+  _key,
+  nftId,
+  setOpen
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  useEffect(() => {
+    if (setOpen) {
+      onOpen()
+    }
+  }, [setOpen])
 
   async function claimReward() {
     const web3Modal = new Web3Modal()
