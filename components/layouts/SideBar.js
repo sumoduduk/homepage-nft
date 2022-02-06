@@ -19,6 +19,7 @@ import NavItem from './NavItem'
 import router from 'next/router'
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
+import { useMoralis } from 'react-moralis'
 
 export default function Sidebar() {
   const [navSize, changeNavSize] = useState('large')
@@ -43,23 +44,58 @@ export default function Sidebar() {
     })
   }
 
+  async function getConnected(web3Modal) {
+    try {
+      const connection = await web3Modal.connect()
+    } catch (error) {
+      console.log(error)
+      const goBack = router.push('/login')
+      return goBack
+    }
+  }
+  async function getAddr(signer) {
+    try {
+      const userAddr = await signer.getAddress()
+      console.log(userAddr)
+
+      setAddress(userAddr)
+    } catch (error) {
+      console.log(error)
+      router.push('/login')
+      return
+    }
+  }
+
+  async function getChain(signer) {
+    try {
+      const chains = await signer.getChainId()
+      console.log(chains)
+      setChain(chains)
+    } catch (error) {
+      console.log(error)
+      router.push('/login')
+      return
+    }
+  }
+
   const userChain = async () => {
-    const web3Modal = new Web3Modal()
-    const connection = await web3Modal.connect()
-    const provider = new ethers.providers.Web3Provider(connection)
-    const signer = provider.getSigner()
-    const userAddr = await signer.getAddress()
-    console.log(userAddr)
-    setAddress(userAddr)
-    const chains = await signer.getChainId()
-    setChain(chains)
-    await subscribeProvider(connection)
-    return connection
+    try {
+      const web3Modal = new Web3Modal()
+      const isConnect = await getConnected(web3Modal)
+      const provider = new ethers.providers.Web3Provider(isConnect)
+      const signer = provider.getSigner()
+      await getAddr(signer)
+      await getChain(signer)
+      await subscribeProvider(isConnect)
+    } catch (error) {
+      console.log(error)
+      return
+    }
   }
 
   useEffect(() => {
     userChain()
-    !addr ?? router.push('/login')
+    addr ?? router.push('/login')
   }, [])
 
   function logOut() {
@@ -103,7 +139,7 @@ export default function Sidebar() {
           navSize={navSize}
           icon={FiHome}
           title="Dashboard"
-          href="/Dashboard"
+          href="/login"
           description="This is the description for the dashboard."
         />
         <NavItem

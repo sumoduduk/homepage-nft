@@ -20,9 +20,15 @@ const LazyVoxelDog = dynamic(() => import('../components/voxel-dog'), {
 })
 
 const Login = () => {
-  const { authenticate, isAuthenticated, account, chainId } = useMoralis()
+  const {
+    authenticate,
+    isAuthenticated,
+    hasAuthError,
+    authError,
+    isAuthUndefined
+  } = useMoralis()
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || hasAuthError || authError || isAuthUndefined) {
     return (
       <Section>
         <Container maxW="full" align="center" justify="center">
@@ -50,7 +56,7 @@ const Login = () => {
   return (
     <Layout title="Dashboard">
       <Flex>
-        <Sidebar _account={account} _chain={chainId} />
+        <Sidebar />
         <Heading>Hello</Heading>
       </Flex>
     </Layout>
