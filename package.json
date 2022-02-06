@@ -1,7 +1,7 @@
 {
-  "name": "craftzdog-homepage",
+  "name": "sumoduduk-homepage",
   "version": "1.0.0",
-  "description": "Takuya's website",
+  "description": "Sumoduduk NFT Minter",
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
@@ -23,15 +23,16 @@
     "date-fns": "^2.28.0",
     "framer-motion": "^5.3.0",
     "ipfs-http-client": "^50.1.2",
-    "moralis": "^1.1.2",
+    "moralis": "^1.2.3",
     "next": "^12.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
-    "react-moralis": "^1.1.0",
+    "react-moralis": "^1.2.1",
     "react-spring": "^9.4.2",
     "three": "^0.134.0",
     "walletlink": "^2.4.5",
+    "magic-sdk": "7.0.0",
     "web3modal": "^1.9.5"
   },
   "devDependencies": {
