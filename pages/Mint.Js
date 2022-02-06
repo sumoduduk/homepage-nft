@@ -6,13 +6,15 @@ import {
   Img,
   Divider,
   IconButton,
-  Button
+  Button,
+  useColorModeValue
 } from '@chakra-ui/react'
 import Layout from '../components/layouts/article'
 import Sidebar from '../components/layouts/SideBar'
 import { ethers, BigNumber } from 'ethers'
 import Web3Modal from 'web3modal'
-import { address, abi } from '../lib/abi'
+import { nftABI } from '../lib/abi'
+import { NFTAddress } from '../lib/contract'
 import { useEffect, useState } from 'react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import Section from '../components/section'
@@ -33,7 +35,7 @@ const Mint = () => {
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
-    const contract = new ethers.Contract(address, abi, signer)
+    const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
 
     const price = await contract.cost()
     let totalPrice = amounts.mul(price)
@@ -52,7 +54,10 @@ const Mint = () => {
             <Heading
               mb={8}
               pl={4}
-              shadow="dark-lg"
+              boxShadow={useColorModeValue(
+                '1px 1px 8px gray',
+                '1px 1px 8px skyblue'
+              )}
               rounded="6"
               h={20}
               pt={3}
@@ -65,7 +70,10 @@ const Mint = () => {
               align="center"
               justify="center"
               pt={12}
-              shadow="dark-lg"
+              boxShadow={useColorModeValue(
+                '1px 1px 8px gray',
+                '1px 1px 8px skyblue'
+              )}
               rounded="6"
               h={800}
               borderRadius={30}
@@ -76,22 +84,44 @@ const Mint = () => {
                 boxSize="xs"
                 borderRadius="12px"
               />
-              <Box pt={12}>
-                <IconButton
-                  m={6}
-                  icon={<MinusIcon />}
-                  onClick={() => setAmount(amount - 1)}
-                />
-                {amount}
-                <IconButton
-                  m={6}
-                  icon={<AddIcon />}
-                  onClick={() => setAmount(amount + 1)}
-                />
+              <Box
+                boxShadow={useColorModeValue(
+                  '1px 1px 8px gray',
+                  '1px 1px 8px skyblue'
+                )}
+                display="inline-grid"
+                pt={0}
+                pb={9}
+                px={8}
+                m={8}
+                borderRadius={18}
+              >
+                <Box pt={12}>
+                  <IconButton
+                    m={6}
+                    icon={<MinusIcon />}
+                    onClick={() => setAmount(amount - 1)}
+                  />
+                  {amount}
+                  <IconButton
+                    m={6}
+                    icon={<AddIcon />}
+                    onClick={() => setAmount(amount + 1)}
+                  />
+                </Box>
+                <Button
+                  boxShadow={useColorModeValue(
+                    '1px 1px 8px gray',
+                    '1px 1px 8px skyblue'
+                  )}
+                  mt={1}
+                  size="lg"
+                  onClick={() => buy()}
+                  mb={8}
+                >
+                  <Heading size="xl">BUY</Heading>
+                </Button>
               </Box>
-              <Button mt={1} onClick={() => buy()}>
-                Buy
-              </Button>
             </Box>
           </Section>
         </Container>

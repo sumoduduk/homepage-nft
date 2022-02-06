@@ -6,7 +6,8 @@ import {
   IconButton,
   Divider,
   Link,
-  Box
+  Box,
+  useColorModeValue
 } from '@chakra-ui/react'
 import {
   FiMenu,
@@ -44,22 +45,27 @@ export default function Sidebar() {
   }
 
   const userChain = async () => {
-    const web3Modal = new Web3Modal()
-    const connection = await web3Modal.connect()
-    const provider = new ethers.providers.Web3Provider(connection)
-    const signer = provider.getSigner()
-    const userAddr = await signer.getAddress()
-    console.log(userAddr)
-    setAddress(userAddr)
-    const chains = await signer.getChainId()
-    setChain(chains)
-    await subscribeProvider(connection)
-    return connection
+    try {
+      const web3Modal = new Web3Modal()
+      const connection = await web3Modal.connect()
+      const provider = new ethers.providers.Web3Provider(connection)
+      const signer = provider.getSigner()
+      const userAddr = await signer.getAddress()
+      console.log(userAddr)
+      setAddress(userAddr)
+      const chains = await signer.getChainId()
+      setChain(chains)
+      await subscribeProvider(connection)
+    } catch (error) {
+      console.log(error)
+      const goBack = router.push('/login')
+      return goBack
+    }
   }
 
   useEffect(() => {
     userChain()
-    !addr ?? router.push('/login')
+    addr ?? router.push('/login')
   }, [])
 
   function logOut() {
@@ -77,7 +83,7 @@ export default function Sidebar() {
       marginTop="2.5vh"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius={navSize == 'small' ? '15px' : '30px'}
-      w={navSize == 'small' ? '75px' : '200px'}
+      w={navSize == 'small' ? '75px' : '230px'}
       flexDir="column"
       justifyContent="space-between"
     >
@@ -143,7 +149,16 @@ export default function Sidebar() {
             ml={4}
             display={navSize == 'small' ? 'none' : 'flex'}
           >
-            <Box w={navSize == 'small' ? '75px' : '170px'}>
+            <Box
+              w={navSize == 'small' ? '75px' : '170px'}
+              boxShadow={useColorModeValue(
+                '1px 1px 8px gray',
+                '1px 1px 8px skyblue'
+              )}
+              p={1}
+              borderRadius={8}
+              mb={4}
+            >
               <Text isTruncated>{addr}</Text>
             </Box>
             <Box>

@@ -57,16 +57,19 @@ const Login = () => {
               <LazyVoxelDog />
             </Box>
             <Button
+              className="shadow-xl shadow-cyan-500/50 font-mono font-semibold"
               bg={useColorModeValue('#088B97', '#C9DFE1')}
-              fontSize={20}
-              fontWeight="bold"
               mb={8}
-              color={useColorModeValue('#C9DADC', '#1B383B')}
-              boxShadow="dark-lg"
+              color={useColorModeValue('#C9DADC', '#005B97')}
               rounded="md"
+              _hover={{
+                bgGradient: 'linear(to-r, teal.500, green.500)'
+              }}
+              fontSize={26}
+              size="lg"
               onClick={() => login()}
             >
-              LOG IN
+              SIGN IN
             </Button>
           </Box>
         </Container>

@@ -1,14 +1,13 @@
 import { Box, Container, Divider, Flex, Heading } from '@chakra-ui/react'
 import Sidebar from '../components/layouts/SideBar'
-import { address, abi } from '../lib/abi'
+import { nftABI } from '../lib/abi'
+import { NFTAddress } from '../lib/contract'
 import { ethers } from 'ethers'
-import Web3Modal, { providers } from 'web3modal'
+import Web3Modal from 'web3modal'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
-import pngegg from '../public/images/pngegg.png'
-// import Image from 'next/image'
 import NftModal from '../components/nftModal'
 
 const Balance = () => {
@@ -26,7 +25,7 @@ const Balance = () => {
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
     const userAddr = signer.getAddress()
-    const contract = new ethers.Contract(address, abi, signer)
+    const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
     const data = await contract.getAllNftDataOwned(userAddr)
     const items = await Promise.all(
       data.map(async i => {

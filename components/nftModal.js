@@ -14,31 +14,31 @@ import {
   OrderedList,
   UnorderedList,
   Image,
-  Img
+  Img,
+  useColorModeValue
 } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
 
-const NftModal = ({ image, name, reward, released, time, setOpen, _key }) => {
+const NftModal = ({ image, name, reward, released, time, _key }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  useEffect(() => {
-    if (setOpen) {
-      onOpen()
-    }
-  }, [setOpen])
 
   return (
     <Box
       as="button"
-      className="border shadow rounded-xl overflow-hidden hover:scale-110 transition ease-in-out delay-150 hover:-translate-y-1 hover:skew-y-2"
+      className="border shadow rounded-xl overflow-hidden hover:scale-125 transition ease-in-out delay-150 hover:-translate-y-1 hover:skew-y-2"
       key={_key}
       mx={2}
       my={4}
       size="md"
       onClick={onOpen}
+      boxShadow={useColorModeValue('1px 1px 8px gray', '1px 1px 8px skyblue')}
     >
-      <Img src="images/pngegg.png" className="hover:skew-y-2" />
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Img src={image} className="hover:skew-y-2" />
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        motionPreset="slideInRight"
+      >
         <ModalContent>
           <ModalHeader>{name}</ModalHeader>
           <ModalBody>
@@ -57,7 +57,9 @@ const NftModal = ({ image, name, reward, released, time, setOpen, _key }) => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
+            <Button variant="ghost" colorScheme="blue">
+              Secondary Action
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

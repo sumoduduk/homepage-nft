@@ -32,7 +32,14 @@ const Main = ({ children, router }) => {
 
       <NavBar path={router.asPath} />
 
-      <Container pt={20} border="8px" mt={16} maxW="auto" borderRadius={30}>
+      <Container
+        pt={20}
+        border="4px"
+        mt={16}
+        maxW="100%"
+        h="100%"
+        borderRadius={30}
+      >
         {/* <LazyVoxelDog /> */}
 
         {children}
