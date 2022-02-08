@@ -6,7 +6,7 @@ import {
   Flex,
   Heading
 } from '@chakra-ui/react'
-import Sidebar from '../components/layouts/SideBar'
+import Sidebar from '../components/sidebar'
 import Layout from '../components/layouts/article'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
@@ -18,17 +18,17 @@ import { useState, useEffect } from 'react'
 const Dashboard = () => {
   const [supply, setSupply] = useState('')
 
-  useEffect(() => {
-    ;(async () => {
-      const web3Modal = new Web3Modal()
-      const connection = await web3Modal.connect()
-      const provider = new ethers.providers.Web3Provider(connection)
-      const signer = provider.getSigner()
-      const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
-      const getSupply = await contract.totalSupply()
-      setSupply(getSupply.toNumber())
-    })()
-  }, [])
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const web3Modal = new Web3Modal()
+  //     const connection = await web3Modal.connect()
+  //     const provider = new ethers.providers.Web3Provider(connection)
+  //     const signer = provider.getSigner()
+  //     const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
+  //     const getSupply = await contract.totalSupply()
+  //     setSupply(getSupply.toNumber())
+  //   })()
+  // }, [])
 
   return (
     <Layout title="Dashboard">

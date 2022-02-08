@@ -6,7 +6,8 @@ import {
   Heading,
   Radio,
   RadioGroup,
-  Stack
+  Stack,
+  useBoolean
 } from '@chakra-ui/react'
 import Sidebar from '../components/layouts/SideBar'
 import { nftABI } from '../lib/abi'
@@ -22,7 +23,6 @@ import NftModal from '../components/nftModal'
 const Balance = () => {
   const [nfts, setNfts] = useState([])
   //const [loadingState, setLoadingState] = useState('not-load')
-  // const [reward, setReward] = useState(true)
 
   function currency(numbers) {
     let len = numbers.length
@@ -48,9 +48,15 @@ const Balance = () => {
     const items = await Promise.all(
       data.map(async i => {
         const tokenUri = await contract.tokenURI(i.id)
-        const metaData = await axios.get(
-          `https://cors-anywhere.herokuapp.com/${tokenUri}`
-        )
+        const metaData = await axios.get(`${tokenUri}`, {
+          crossdomain: true,
+          withCredentials: false,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+          }
+        })
         const epoch = i.timeIssued.toNumber()
         const epochNumber = epoch * 1000
         const date = new Date(epochNumber).toLocaleString()

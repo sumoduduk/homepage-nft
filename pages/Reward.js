@@ -11,9 +11,11 @@ import {
   Container,
   Divider,
   Flex,
-  Heading
+  Heading,
+  VStack
 } from '@chakra-ui/react'
 import Section from '../components/section'
+import Card from '../components/card'
 
 const Reward = () => {
   const [profit, setProfit] = useState('')
@@ -45,7 +47,7 @@ const Reward = () => {
     const _profit = await nftContract.viewPendingRewardPerAddress(addr)
     const dollar = currency(ethers.utils.commify(ethers.utils.formatEther(_profit)))
     
-    setProfit(`$ ${dollar}`)
+    setProfit(dollar)
   }
 
   async function getReleased() {
@@ -56,7 +58,7 @@ const Reward = () => {
     const _profit = await nftContract.TotalRewardReleasedPerAddress(addr)
     const dollar = currency(ethers.utils.commify(ethers.utils.formatEther(_profit)))
     
-    setProfitReleased(`$ ${dollar}`)
+    setProfitReleased(dollar)
   }
 
   return (
@@ -69,44 +71,17 @@ const Reward = () => {
               <Heading>Reward</Heading>
             </Box>
             <Divider />
-            <Box my={12} position="relative" h='full'>
-              <Box className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-4" >
-                <Box  mx={8}  border='4px' borderRadius={20}>
-                  <Box >
-                    <Heading >NFT Reward Hold</Heading>
-                  </Box>
-                  <Box justifyContent="center" >
-                    <Heading>{profit}</Heading>
-                  </Box>
-                  <Box justifyContent="center">
-                    <Button
-                      onClick={() => {
-                        getProfit()
-                      }}
-                    >
-                      VIEW
-                    </Button>
-                  </Box>
-                </Box>
-                <Box borderRadius={20}>
-                  <Box >
-                    <Heading alignSelf="center">Total Reward Collected</Heading>
-                  </Box>
-                  <Box  justifyContent="center">
-                    <Heading>{profitReleased}</Heading>
-                  </Box>
-                  <Box justifyContent="center">
-                    <Button
-                      onClick={() => {
-                        getReleased()
-                      }}
-                    >
-                      VIEW
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
+            <VStack>
+              <ul>
+                <Card/>
+                <Card/>
+                <Card/>
+                <Card/>
+                <Card/>
+                <Card/>
+                <Card/>
+              </ul>
+              </VStack>            
           </Container>
         </Flex>
       </Section>

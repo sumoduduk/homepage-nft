@@ -20,6 +20,7 @@ import NavItem from './NavItem'
 import router from 'next/router'
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
+import { MotionFlex } from '../motion'
 
 export default function Sidebar() {
   const [navSize, changeNavSize] = useState('large')
@@ -66,7 +67,7 @@ export default function Sidebar() {
   useEffect(() => {
     userChain()
     addr ?? router.push('/login')
-  }, [])
+  }, [addr])
 
   function logOut() {
     const web3Modal = new Web3Modal()
@@ -76,7 +77,7 @@ export default function Sidebar() {
   }
 
   return (
-    <Flex
+    <MotionFlex
       pos="sticky"
       left="5"
       h="95vh"
@@ -84,6 +85,7 @@ export default function Sidebar() {
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius={navSize == 'small' ? '15px' : '30px'}
       w={navSize == 'small' ? '75px' : '230px'}
+      animate={{ width: navSize == 'small' ? '80px' : '254px' }}
       flexDir="column"
       justifyContent="space-between"
     >
@@ -159,7 +161,9 @@ export default function Sidebar() {
               borderRadius={8}
               mb={4}
             >
-              <Text isTruncated>{addr}</Text>
+              <Text isTruncated fontSize="20px" pr={5}>
+                {addr}
+              </Text>
             </Box>
             <Box>
               <Text isTruncated>{chain}</Text>
@@ -169,6 +173,6 @@ export default function Sidebar() {
           </Flex>
         </Flex>
       </Flex>
-    </Flex>
+    </MotionFlex>
   )
 }

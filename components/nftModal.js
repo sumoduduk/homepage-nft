@@ -16,8 +16,13 @@ import {
   Image,
   Img,
   useColorModeValue,
-  Text
+  Text,
+  Icon,
+  Flex,
+  chakra
 } from '@chakra-ui/react'
+import { StarIcon, BellIcon } from '@chakra-ui/icons'
+import { MdReceipt } from 'react-icons/md'
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 import { NFTAddress } from '../lib/contract'
@@ -54,32 +59,73 @@ const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
         onClose={onClose}
         isCentered
         motionPreset="slideInBottom"
-        borderRadius="20px"
       >
-        <ModalContent>
-          <ModalHeader>{name}</ModalHeader>
+        <ModalContent
+          w="md"
+          mx="auto"
+          mt="12px"
+          bg={useColorModeValue('white', 'gray.800')}
+          shadow="lg"
+          rounded="lg"
+        >
           <ModalBody>
-            <Box mb={5}>
-              <Image borderRadius="20px" src={image} />
-            </Box>
             <Box>
-              <UnorderedList spacing={3}>
-                <ListItem>
-                  <Text fontSize="20px" fontStyle="oblique" fontWeight="bold">
-                    Reward Hold : $ {reward}
-                  </Text>
-                </ListItem>
-                <ListItem>
-                  <Text fontSize="20px" fontStyle="oblique" fontWeight="bold">
-                    Reward Released : $ {released}
-                  </Text>
-                </ListItem>
-                <ListItem>
-                  <Text fontSize="20px" fontStyle="oblique" fontWeight="bold">
-                    NFT Created at : {time}
-                  </Text>
-                </ListItem>
-              </UnorderedList>
+              <Image
+                w="full"
+                h="full"
+                objectPosition="center"
+                src={image}
+                borderRadius={16}
+                my="15px"
+                fit="cover"
+              />
+              <Flex
+                alignItems="center"
+                px={6}
+                py={3}
+                bg="gray.900"
+                borderRadius={16}
+              >
+                <Icon as={StarIcon} h={6} w={6} color="white" />
+                <chakra.h1 mx={3} color="white" fontWeight="bold" fontSize="lg">
+                  {name}
+                </chakra.h1>
+              </Flex>
+            </Box>
+            <Box py={4} px={6}>
+              <Flex
+                alignItems="center"
+                mt={4}
+                color={useColorModeValue('gray.700', 'gray.200')}
+              >
+                <Icon as={MdReceipt} h={6} w={6} mr={2} />
+
+                <chakra.h1 px={2} fontSize="lg">
+                  Reward Hold : $ {reward}
+                </chakra.h1>
+              </Flex>
+              <Flex
+                alignItems="center"
+                mt={4}
+                color={useColorModeValue('gray.700', 'gray.200')}
+              >
+                <Icon as={MdReceipt} h={6} w={6} mr={2} />
+
+                <chakra.h1 px={2} fontSize="lg">
+                  Reward Released : $ {released}
+                </chakra.h1>
+              </Flex>
+              <Flex
+                alignItems="center"
+                mt={4}
+                color={useColorModeValue('gray.700', 'gray.200')}
+              >
+                <Icon as={BellIcon} h={6} w={6} mr={2} />
+
+                <chakra.h1 px={2} fontSize="lg">
+                  NFT Created at : {time}
+                </chakra.h1>
+              </Flex>
             </Box>
           </ModalBody>
           <ModalFooter>
