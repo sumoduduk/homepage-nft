@@ -24,6 +24,14 @@ const Balance = () => {
   //const [loadingState, setLoadingState] = useState('not-load')
   // const [reward, setReward] = useState(true)
 
+  function currency(numbers) {
+    let len = numbers.length
+    if (len <= 18) {
+      return numbers
+    }
+    return numbers.slice(() => len, -16)
+  }
+
   useEffect(() => {
     loadAsset()
   }, [])
@@ -49,13 +57,11 @@ const Balance = () => {
 
         let item = {
           tokenId: i.id.toNumber(),
-          pendingReward: ethers.utils.formatUnits(
-            i.pendingReward.toString(),
-            'ether'
+          pendingReward: currency(
+            ethers.utils.commify(ethers.utils.formatEther(i.pendingReward))
           ),
-          rewardReleased: ethers.utils.formatUnits(
-            i.rewardReleased.toString(),
-            'ether'
+          rewardReleased: currency(
+            ethers.utils.commify(ethers.utils.formatEther(i.rewardReleased))
           ),
           nftCreated: date,
           image: metaData.data.image,

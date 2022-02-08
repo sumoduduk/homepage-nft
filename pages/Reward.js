@@ -28,12 +28,12 @@ const Reward = () => {
       return signer
     }
 
-    async function currency(reward) {
-        let formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-          })
-          formatter.format(reward)
+    function currency(numbers) {
+      let len = numbers.length
+      if (len <= 15) {
+        return numbers
+      }
+      return numbers.slice(() => len, -16)
     }
 
 
@@ -43,9 +43,9 @@ const Reward = () => {
 
     const nftContract = new ethers.Contract(NFTAddress, nftABI.abi, sign)
     const _profit = await nftContract.viewPendingRewardPerAddress(addr)
-    const dollar = ethers.utils.formatUnits(_profit.toString(), 'ether')
+    const dollar = currency(ethers.utils.commify(ethers.utils.formatEther(_profit)))
     
-    setProfit(dollar)
+    setProfit(`$ ${dollar}`)
   }
 
   async function getReleased() {
@@ -54,8 +54,9 @@ const Reward = () => {
 
     const nftContract = new ethers.Contract(NFTAddress, nftABI.abi, sign)
     const _profit = await nftContract.TotalRewardReleasedPerAddress(addr)
-    const dollar = ethers.utils.formatUnits(_profit.toString(), 'ether')
-    setProfitReleased(dollar)
+    const dollar = currency(ethers.utils.commify(ethers.utils.formatEther(_profit)))
+    
+    setProfitReleased(`$ ${dollar}`)
   }
 
   return (
@@ -68,16 +69,16 @@ const Reward = () => {
               <Heading>Reward</Heading>
             </Box>
             <Divider />
-            <Box my={12} position="relative" h='full'border='4px'>
-              <Box className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-4 h-full" border='4px' >
-                <Box borderRadius={20} border='4px'  mx={8}>
-                  <Box  border='4px'>
-                    <Heading alignSelf="center">NFT Reward</Heading>
+            <Box my={12} position="relative" h='full'>
+              <Box className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-4" >
+                <Box  mx={8}  border='4px' borderRadius={20}>
+                  <Box >
+                    <Heading >NFT Reward Hold</Heading>
                   </Box>
-                  <Box justifyContent="center" border='4px' h='30%'>
-                    <Heading>$ {profit}</Heading>
+                  <Box justifyContent="center" >
+                    <Heading>{profit}</Heading>
                   </Box>
-                  <Box justifyContent="center" border='4px'>
+                  <Box justifyContent="center">
                     <Button
                       onClick={() => {
                         getProfit()
@@ -89,10 +90,10 @@ const Reward = () => {
                 </Box>
                 <Box borderRadius={20}>
                   <Box >
-                    <Heading alignSelf="center">NFT Total Reward</Heading>
+                    <Heading alignSelf="center">Total Reward Collected</Heading>
                   </Box>
                   <Box  justifyContent="center">
-                    <Heading> $ {profitReleased}</Heading>
+                    <Heading>{profitReleased}</Heading>
                   </Box>
                   <Box justifyContent="center">
                     <Button

@@ -15,31 +15,17 @@ import {
   UnorderedList,
   Image,
   Img,
-  useColorModeValue
+  useColorModeValue,
+  Text
 } from '@chakra-ui/react'
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 import { NFTAddress } from '../lib/contract'
 import { nftABI } from '../lib/abi'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-const NftModal = ({
-  image,
-  name,
-  reward,
-  released,
-  time,
-  _key,
-  nftId,
-  setOpen
-}) => {
+const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  useEffect(() => {
-    if (setOpen) {
-      onOpen()
-    }
-  }, [setOpen])
 
   async function claimReward() {
     const web3Modal = new Web3Modal()
@@ -55,33 +41,44 @@ const NftModal = ({
   return (
     <Box
       as="button"
-      className="border shadow rounded-xl overflow-hidden hover:scale-125 transition ease-in-out delay-150 hover:-translate-y-1 hover:skew-y-2"
+      className="border rounded-xl overflow-hidden hover:scale-125 transition ease-in-out delay-150  hover:-translate-y-1 hover:skew-y-2 shadow-xl shadow-cyan-500/50"
       key={_key}
       mx={2}
       my={4}
       size="md"
       onClick={onOpen}
-      boxShadow={useColorModeValue('1px 1px 8px gray', '1px 1px 8px skyblue')}
     >
       <Img src={image} className="hover:skew-y-2" />
       <Modal
         isOpen={isOpen}
         onClose={onClose}
         isCentered
-        motionPreset="slideInRight"
+        motionPreset="slideInBottom"
         borderRadius="20px"
       >
         <ModalContent>
           <ModalHeader>{name}</ModalHeader>
           <ModalBody>
-            <Box>
+            <Box mb={5}>
               <Image borderRadius="20px" src={image} />
             </Box>
             <Box>
               <UnorderedList spacing={3}>
-                <ListItem>Reward Hold : $ {reward}</ListItem>
-                <ListItem>Reward Released : $ {released}</ListItem>
-                <ListItem>NFT Created : {time}</ListItem>
+                <ListItem>
+                  <Text fontSize="20px" fontStyle="oblique" fontWeight="bold">
+                    Reward Hold : $ {reward}
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <Text fontSize="20px" fontStyle="oblique" fontWeight="bold">
+                    Reward Released : $ {released}
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <Text fontSize="20px" fontStyle="oblique" fontWeight="bold">
+                    NFT Created at : {time}
+                  </Text>
+                </ListItem>
               </UnorderedList>
             </Box>
           </ModalBody>
