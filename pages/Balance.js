@@ -1,14 +1,4 @@
-import {
-  Box,
-  Container,
-  Divider,
-  Flex,
-  Heading,
-  Radio,
-  RadioGroup,
-  Stack,
-  useBoolean
-} from '@chakra-ui/react'
+import { Box, Container, Divider, Flex, Heading } from '@chakra-ui/react'
 import Sidebar from '../components/layouts/SideBar'
 import { nftABI } from '../lib/abi'
 import { NFTAddress } from '../lib/contract'
@@ -50,11 +40,12 @@ const Balance = () => {
         const tokenUri = await contract.tokenURI(i.id)
         const metaData = await axios.get(`${tokenUri}`, {
           crossdomain: true,
-          withCredentials: false,
+
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+            'Content-Type': 'application/json',
+            Accept: '/',
+            'Access-Control-Request-Methods': 'GET',
+            'Access-Control-Allow-Origin': '*'
           }
         })
         const epoch = i.timeIssued.toNumber()
