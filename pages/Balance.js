@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react'
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import NftModal from '../components/nftModal'
+import { useMoralisCloudFunction } from 'react-moralis'
 
 const Balance = () => {
   const [nfts, setNfts] = useState([])
@@ -36,6 +37,8 @@ const Balance = () => {
     const items = await Promise.all(
       datas.map(async i => {
         const tokenUri = await contract.tokenURI(i.id)
+        // console.log(tokenUri)
+
         const epoch = i.timeIssued.toNumber()
         const epochNumber = epoch * 1000
         const date = new Date(epochNumber).toLocaleString()

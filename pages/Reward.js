@@ -12,13 +12,13 @@ import {
   Divider,
   Flex,
   Heading,
-  VStack
+  VStack, Text, Center
 } from '@chakra-ui/react'
 import Section from '../components/section'
 import Card from '../components/card'
 
 const Reward = () => {
-  const [profit, setProfit] = useState('')
+  const [profit, setProfit] = useState(0)
   const [profitReleased, setProfitReleased] = useState('')
 
     async function getSign() {
@@ -46,8 +46,8 @@ const Reward = () => {
     const nftContract = new ethers.Contract(NFTAddress, nftABI.abi, sign)
     const _profit = await nftContract.viewPendingRewardPerAddress(addr)
     const dollar = currency(ethers.utils.commify(ethers.utils.formatEther(_profit)))
-    
     setProfit(dollar)
+    console.log(dollar)
   }
 
   async function getReleased() {
@@ -72,15 +72,10 @@ const Reward = () => {
             </Box>
             <Divider />
             <VStack>
-              <ul>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-              </ul>
+              <Center><Text>{profit}</Text>
+                <Button onClick={() => getProfit()}>see</Button>
+               </Center>
+                
               </VStack>            
           </Container>
         </Flex>
