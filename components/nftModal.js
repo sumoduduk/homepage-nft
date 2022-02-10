@@ -3,18 +3,10 @@ import {
   Button,
   useDisclosure,
   Modal,
-  ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalFooter,
   ModalBody,
-  List,
-  ListItem,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
   Image,
-  Img,
   useColorModeValue,
   Text,
   Icon,
@@ -28,8 +20,26 @@ import { ethers } from 'ethers'
 import { NFTAddress } from '../lib/contract'
 import { nftABI } from '../lib/abi'
 import { useEffect, useState } from 'react'
+import { useMoralisCloudFunction } from 'react-moralis'
+import axios from 'axios'
+import { data } from 'autoprefixer'
 
-const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
+const NftModal = ({ uri, reward, released, time, _key, nftId }) => {
+  const [aset, set] = useState('')
+  // const { data } = useMoralisCloudFunction('fetchNft', { theUrl: uri })
+
+  useEffect(() => {
+    // console.log(uri)
+
+    // setUrl(uri)
+    // ;(async () => await fetch({ throwOnError: true }))()
+    const data = async () => {
+      const meta = await axios.get(`https://cors-anywhere.herokuapp.com/${uri}`)
+      return meta
+    }
+    console.log(data)
+  }, [])
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   async function claimReward() {
@@ -53,7 +63,11 @@ const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
       size="md"
       onClick={onOpen}
     >
-      <Img src={image} className="hover:skew-y-2" />
+      <Image
+        src={data.image}
+        className="hover:skew-y-2"
+        fallbackSrc="https://via.placeholder.com/150"
+      />
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -74,10 +88,11 @@ const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
                 w="full"
                 h="full"
                 objectPosition="center"
-                src={image}
+                src="https://via.placeholder.com/150"
                 borderRadius={16}
                 my="15px"
                 fit="cover"
+                fallbackSrc="https://via.placeholder.com/150"
               />
               <Flex
                 alignItems="center"
@@ -88,7 +103,7 @@ const NftModal = ({ image, name, reward, released, time, _key, nftId }) => {
               >
                 <Icon as={StarIcon} h={6} w={6} color="white" />
                 <chakra.h1 mx={3} color="white" fontWeight="bold" fontSize="lg">
-                  {name}
+                  xqdqdqw
                 </chakra.h1>
               </Flex>
             </Box>

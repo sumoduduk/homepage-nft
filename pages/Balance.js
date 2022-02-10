@@ -5,14 +5,12 @@ import { NFTAddress } from '../lib/contract'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import NftModal from '../components/nftModal'
 
 const Balance = () => {
   const [nfts, setNfts] = useState([])
-  //const [loadingState, setLoadingState] = useState('not-load')
 
   function currency(numbers) {
     let len = numbers.length
@@ -33,21 +31,11 @@ const Balance = () => {
     const signer = provider.getSigner()
     const userAddr = signer.getAddress()
     const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
-    const data = await contract.getAllNftDataOwned(userAddr)
+    const datas = await contract.getAllNftDataOwned(userAddr)
 
     const items = await Promise.all(
-      data.map(async i => {
+      datas.map(async i => {
         const tokenUri = await contract.tokenURI(i.id)
-        const metaData = await axios.get(`${tokenUri}`, {
-          crossdomain: true,
-
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: '/',
-            'Access-Control-Request-Methods': 'GET',
-            'Access-Control-Allow-Origin': '*'
-          }
-        })
         const epoch = i.timeIssued.toNumber()
         const epochNumber = epoch * 1000
         const date = new Date(epochNumber).toLocaleString()
@@ -61,14 +49,14 @@ const Balance = () => {
             ethers.utils.commify(ethers.utils.formatEther(i.rewardReleased))
           ),
           nftCreated: date,
-          image: metaData.data.image,
-          name: metaData.data.name
+          uri: tokenUri
         }
 
         return item
       })
     )
     setNfts(items)
+
     // setLoadingState('load')
   }
 
@@ -86,8 +74,7 @@ const Balance = () => {
               <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
                 {nfts.map((nft, i) => (
                   <NftModal
-                    image={nft.image}
-                    name={nft.name}
+                    uri={nft.uri}
                     reward={nft.pendingReward}
                     released={nft.rewardReleased}
                     time={nft.nftCreated}
