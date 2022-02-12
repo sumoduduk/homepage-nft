@@ -19,23 +19,13 @@ import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 import { NFTAddress } from '../lib/contract'
 import { nftABI } from '../lib/abi'
-import { useEffect } from 'react'
 import { useMoralisCloudFunction } from 'react-moralis'
 
 const NftModal = ({ uri, reward, released, time, _key, nftId }) => {
-  const { fetch, data } = useMoralisCloudFunction('fetchNft', {
+  const { data } = useMoralisCloudFunction('fetchNft', {
     theUrl: `${uri}`
   })
   // const meta = await axios.get(`https://cors-anywhere.herokuapp.com/${uri}`)
-
-  useEffect(() => {
-    async function promise() {
-      await fetch({
-        throwOnError: true
-      })
-    }
-  }, [data])
-  // console.log(data)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
