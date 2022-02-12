@@ -7,7 +7,8 @@ import {
   Divider,
   Link,
   Box,
-  useColorModeValue
+  useColorModeValue,
+  VStack
 } from '@chakra-ui/react'
 import {
   FiMenu,
@@ -20,9 +21,12 @@ import NavItem from './NavItem'
 import router from 'next/router'
 import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
-import { MotionFlex } from '../motion'
+import { MotionFlex, MotionHeader, MotionText } from '../motion'
+import { AnimatePresence } from 'framer-motion'
 
 export default function Sidebar() {
+  const [select, setSelect] = useState(`Dashboard`)
+
   const [navSize, changeNavSize] = useState('large')
 
   const [addr, setAddress] = useState('')
@@ -30,7 +34,8 @@ export default function Sidebar() {
 
   const subscribeProvider = async connection => {
     if (!connection.on) {
-      return
+      const web3Modal = new Web3Modal()
+      web3Modal.clearCachedProvider()
     }
     connection.on('accountsChanged', async accounts => {
       setAddress(accounts)
@@ -41,7 +46,9 @@ export default function Sidebar() {
       router.reload()
     })
     connection.on('disconnect', async () => {
-      setAddress(null)
+      setAddress(null || undefined)
+      const web3Modal = new Web3Modal()
+      web3Modal.clearCachedProvider()
     })
   }
 
@@ -59,8 +66,7 @@ export default function Sidebar() {
       await subscribeProvider(connection)
     } catch (error) {
       console.log(error)
-      const goBack = router.push('/login')
-      return goBack
+      return router.push('/login')
     }
   }
 
@@ -96,6 +102,20 @@ export default function Sidebar() {
         alignItems={navSize == 'small' ? 'center' : 'flex-start'}
         as="nav"
       >
+        <AnimatePresence>
+          {navSize == 'large' && (
+            <MotionHeader
+              color="red"
+              size="md"
+              initial={{ opacity: 0, x: -60 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -60 }}
+              transition={{ duration: 1 }}
+            >
+              <MotionText text={select} />
+            </MotionHeader>
+          )}
+        </AnimatePresence>
         <IconButton
           background="none"
           mt={5}
@@ -113,6 +133,7 @@ export default function Sidebar() {
           title="Dashboard"
           href="/Dashboard"
           description="This is the description for the dashboard."
+          onClick={() => setSelect(`Dashboard`)}
         />
         <NavItem
           as={Link}
@@ -120,6 +141,7 @@ export default function Sidebar() {
           icon={FiDollarSign}
           title="Mint"
           href="/Mint"
+          onClick={() => setSelect(`Mint`)}
         />
         <NavItem
           as={Link}
@@ -127,6 +149,7 @@ export default function Sidebar() {
           icon={FiBriefcase}
           title="Collection"
           href="/Balance"
+          onClick={() => setSelect(`Collection`)}
         />
         <NavItem
           as={Link}
@@ -134,6 +157,7 @@ export default function Sidebar() {
           icon={FiCalendar}
           title="Reward"
           href="/Reward"
+          onClick={() => setSelect(`Reward`)}
         />
       </Flex>
 

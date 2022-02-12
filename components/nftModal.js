@@ -38,6 +38,7 @@ const NftModal = ({ uri, reward, released, time, _key, nftId }) => {
 
     const claim = await contract.claimRewardPerNft(nftId)
     await claim.wait()
+    onClose()
   }
 
   return (

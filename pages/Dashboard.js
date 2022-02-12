@@ -6,7 +6,7 @@ import {
   Flex,
   Heading
 } from '@chakra-ui/react'
-import Sidebar from '../components/sidebar'
+import Sidebar from '../components/layouts/SideBar'
 import Layout from '../components/layouts/article'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'

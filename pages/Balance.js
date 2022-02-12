@@ -23,7 +23,7 @@ const Balance = () => {
 
   useEffect(() => {
     loadAsset()
-  }, [])
+  }, [nfts])
 
   async function loadAsset() {
     const web3Modal = new Web3Modal()

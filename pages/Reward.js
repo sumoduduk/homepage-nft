@@ -72,9 +72,13 @@ const Reward = () => {
             </Box>
             <Divider />
             <VStack>
-              <Center><Text>{profit}</Text>
-                <Button onClick={() => getProfit()}>see</Button>
-               </Center>
+              <li>
+                <Card/>
+                <Card/>
+                <Card/>
+                <Card/><Card/>
+                <Card/>
+              </li>
                 
               </VStack>            
           </Container>
