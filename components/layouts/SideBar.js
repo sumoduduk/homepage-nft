@@ -52,6 +52,40 @@ export default function Sidebar() {
     })
   }
 
+  async function getConnected(web3Modal) {
+    try {
+      const connection = await web3Modal.connect()
+    } catch (error) {
+      console.log(error)
+      const goBack = router.push('/login')
+      return goBack
+    }
+  }
+  async function getAddr(signer) {
+    try {
+      const userAddr = await signer.getAddress()
+      console.log(userAddr)
+
+      setAddress(userAddr)
+    } catch (error) {
+      console.log(error)
+      router.push('/login')
+      return
+    }
+  }
+
+  async function getChain(signer) {
+    try {
+      const chains = await signer.getChainId()
+      console.log(chains)
+      setChain(chains)
+    } catch (error) {
+      console.log(error)
+      router.push('/login')
+      return
+    }
+  }
+
   const userChain = async () => {
     try {
       const web3Modal = new Web3Modal()
@@ -131,7 +165,7 @@ export default function Sidebar() {
           navSize={navSize}
           icon={FiHome}
           title="Dashboard"
-          href="/Dashboard"
+          href="/login"
           description="This is the description for the dashboard."
           onClick={() => setSelect(`Dashboard`)}
         />
