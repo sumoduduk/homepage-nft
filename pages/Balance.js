@@ -8,10 +8,13 @@ import { useState, useEffect } from 'react'
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import NftModal from '../components/nftModal'
-import { useMoralisCloudFunction } from 'react-moralis'
+import { useMoralis } from 'react-moralis'
 
 const Balance = () => {
   const [nfts, setNfts] = useState([])
+  const [render, setRender] = useState(``)
+  const [loading, setLoading] = useState(false)
+  const { Moralis } = useMoralis()
 
   function currency(numbers) {
     let len = numbers.length
@@ -20,12 +23,15 @@ const Balance = () => {
     }
     return numbers.slice(() => len, -16)
   }
+  const tanggal = epochNumber => new Date(epochNumber).toLocaleString()
 
   useEffect(() => {
     loadAsset()
-  }, [nfts])
+    console.log(render)
+  }, [render])
 
   async function loadAsset() {
+    setLoading(true)
     const web3Modal = new Web3Modal()
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
@@ -37,11 +43,13 @@ const Balance = () => {
     const items = await Promise.all(
       datas.map(async i => {
         const tokenUri = await contract.tokenURI(i.id)
-        // console.log(tokenUri)
+        const params = { theUrl: `${tokenUri}` }
+        const meta = await Moralis.Cloud.run('fetchNft', params)
 
         const epoch = i.timeIssued.toNumber()
         const epochNumber = epoch * 1000
-        const date = new Date(epochNumber).toLocaleString()
+
+        const date = tanggal(epochNumber)
 
         let item = {
           tokenId: i.id.toNumber(),
@@ -52,7 +60,8 @@ const Balance = () => {
             ethers.utils.commify(ethers.utils.formatEther(i.rewardReleased))
           ),
           nftCreated: date,
-          uri: tokenUri
+          image: meta.data.image,
+          name: meta.data.name
         }
 
         return item
@@ -77,12 +86,14 @@ const Balance = () => {
               <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
                 {nfts.map((nft, i) => (
                   <NftModal
-                    uri={nft.uri}
+                    image={nft.image}
+                    name={nft.name}
                     reward={nft.pendingReward}
                     released={nft.rewardReleased}
                     time={nft.nftCreated}
                     nftId={nft.tokenId}
                     key={i}
+                    render={setRender}
                   />
                 ))}
               </Box>

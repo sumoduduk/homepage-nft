@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   return (
     <Layout title="Dashboard">
-      <Section delay={(0, 5)}>
+      <Section delay={0.5}>
         <Flex>
           <Sidebar />
           <Container maxW="full">

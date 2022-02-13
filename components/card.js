@@ -10,7 +10,6 @@ import {
   Text,
   useBreakpointValue,
   useColorModeValue,
-  useDisclosure,
   useToast
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
@@ -19,9 +18,8 @@ import { useInView } from 'react-intersection-observer'
 
 const MotionBox = motion(Box)
 
-export default function Card() {
+export default function Card({ title, label, method, scMethod, scButtonName }) {
   const toast = useToast()
-  const disclosure = useDisclosure()
   const progress = useMemo(() => Math.floor(Math.random() * (100 - 1)) + 1, [])
 
   const cardRef = useRef()
@@ -66,11 +64,18 @@ export default function Card() {
           }}
           onClick={scrollToCard}
         >
-          <CircularProgress value={progress} color="blue.400" size="128px">
-            <CircularProgressLabel>{progress}%</CircularProgressLabel>
-          </CircularProgress>
+          <Box
+            boxShadow={useColorModeValue(
+              '1px 1px 8px gray',
+              '1px 1px 8px skyblue'
+            )}
+            borderRadius={20}
+            m={4}
+          >
+            <Heading p={1}>$ {label}</Heading>
+          </Box>
           <Heading fontSize={'2xl'} fontFamily={'body'}>
-            test
+            {title}
           </Heading>
           <Text
             textAlign={'center'}
@@ -80,38 +85,20 @@ export default function Card() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
             sapiente dolor suscipit animi ullam ad?
           </Text>
-          <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
-            <Badge px={2} py={1} bg={'red.500'} fontWeight={'400'}>
-              Lorem
-            </Badge>
-            <Badge px={2} py={1} bg={'orange.400'} fontWeight={'400'}>
-              Ipsum
-            </Badge>
-            <Badge px={2} py={1} bg={'green.400'} fontWeight={'400'}>
-              Dolor
-            </Badge>
-          </Stack>
           <Stack mt={8} direction={'row'} spacing={4}>
-            <Button
-              flex={1}
-              fontSize={'sm'}
-              rounded={'full'}
-              _focus={{
-                bg: 'gray.200'
-              }}
-              onClick={e => {
-                e.stopPropagation()
-                toast({
-                  position: 'top-left',
-                  title: 'Now Viewing:',
-                  description: 'test',
-                  duration: 1000,
-                  isClosable: true
-                })
-              }}
-            >
-              View
-            </Button>
+            {scMethod && (
+              <Button
+                flex={1}
+                fontSize={'sm'}
+                rounded={'full'}
+                _focus={{
+                  bg: 'gray.200'
+                }}
+                onClick={() => scMethod()}
+              >
+                {scButtonName}
+              </Button>
+            )}
             <Button
               flex={1}
               fontSize={'sm'}
@@ -124,9 +111,9 @@ export default function Card() {
               _focus={{
                 bg: 'blue.500'
               }}
-              onClick={disclosure.onOpen}
+              onClick={() => method()}
             >
-              Read More
+              See
             </Button>
           </Stack>
         </MotionBox>

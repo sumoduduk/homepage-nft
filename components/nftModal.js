@@ -8,10 +8,10 @@ import {
   ModalBody,
   Image,
   useColorModeValue,
-  Text,
   Icon,
   Flex,
-  chakra
+  chakra,
+  Skeleton
 } from '@chakra-ui/react'
 import { StarIcon, BellIcon } from '@chakra-ui/icons'
 import { MdReceipt } from 'react-icons/md'
@@ -20,12 +20,21 @@ import { ethers } from 'ethers'
 import { NFTAddress } from '../lib/contract'
 import { nftABI } from '../lib/abi'
 import { useMoralisCloudFunction } from 'react-moralis'
+import { useCallback, useEffect } from 'react'
 
-const NftModal = ({ uri, reward, released, time, _key, nftId }) => {
-  const { data } = useMoralisCloudFunction('fetchNft', {
-    theUrl: `${uri}`
-  })
-  // const meta = await axios.get(`https://cors-anywhere.herokuapp.com/${uri}`)
+const NftModal = ({
+  name,
+  image,
+  reward,
+  released,
+  time,
+  _key,
+  nftId,
+  render
+}) => {
+  // const { isLoading, data } = useMoralisCloudFunction('fetchNft', {
+  //   theUrl: `${uri}`
+  // })
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -38,6 +47,7 @@ const NftModal = ({ uri, reward, released, time, _key, nftId }) => {
 
     const claim = await contract.claimRewardPerNft(nftId)
     await claim.wait()
+    render(`reward succesfully claimed`)
     onClose()
   }
 
@@ -51,109 +61,96 @@ const NftModal = ({ uri, reward, released, time, _key, nftId }) => {
       size="md"
       onClick={onOpen}
     >
-      {data && (
-        <>
-          <Image
-            src={data.data.image}
-            className="hover:skew-y-2"
-            fallbackSrc="https://via.placeholder.com/150"
-          />
-          <Modal
-            isOpen={isOpen}
-            onClose={onClose}
-            isCentered
-            motionPreset="slideInBottom"
-          >
-            <ModalContent
-              w="md"
-              mx="auto"
-              mt="12px"
-              bg={useColorModeValue('white', 'gray.800')}
-              shadow="lg"
-              rounded="lg"
+      <Image src={image} className="hover:skew-y-2" />
+
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        motionPreset="slideInBottom"
+      >
+        <ModalContent
+          w="md"
+          mx="auto"
+          mt="12px"
+          bg={useColorModeValue('white', 'gray.800')}
+          shadow="lg"
+          rounded="lg"
+        >
+          <ModalBody>
+            <Box>
+              <Image
+                w="full"
+                h="full"
+                objectPosition="center"
+                src={image}
+                borderRadius={16}
+                my="15px"
+                fit="cover"
+              />
+              <Flex
+                alignItems="center"
+                px={6}
+                py={3}
+                bg="gray.900"
+                borderRadius={16}
+              >
+                <Icon as={StarIcon} h={6} w={6} color="white" />
+                <chakra.h1 mx={3} color="white" fontWeight="bold" fontSize="lg">
+                  {name}
+                </chakra.h1>
+              </Flex>
+            </Box>
+            <Box py={4} px={6}>
+              <Flex
+                alignItems="center"
+                mt={4}
+                color={useColorModeValue('gray.700', 'gray.200')}
+              >
+                <Icon as={MdReceipt} h={6} w={6} mr={2} />
+
+                <chakra.h1 px={2} fontSize="lg">
+                  Reward Hold: $ {reward}
+                </chakra.h1>
+              </Flex>
+              <Flex
+                alignItems="center"
+                mt={4}
+                color={useColorModeValue('gray.700', 'gray.200')}
+              >
+                <Icon as={MdReceipt} h={6} w={6} mr={2} />
+
+                <chakra.h1 px={2} fontSize="lg">
+                  Reward Released: $ {released}
+                </chakra.h1>
+              </Flex>
+              <Flex
+                alignItems="center"
+                mt={4}
+                color={useColorModeValue('gray.700', 'gray.200')}
+              >
+                <Icon as={BellIcon} h={6} w={6} mr={2} />
+
+                <chakra.h1 px={2} fontSize="lg">
+                  NFT Created at: {time}
+                </chakra.h1>
+              </Flex>
+            </Box>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button
+              variant="ghost"
+              colorScheme="blue"
+              onClick={() => claimReward()}
             >
-              <ModalBody>
-                <Box>
-                  <Image
-                    w="full"
-                    h="full"
-                    objectPosition="center"
-                    src={data.data.image}
-                    borderRadius={16}
-                    my="15px"
-                    fit="cover"
-                    fallbackSrc="https://via.placeholder.com/150"
-                  />
-                  <Flex
-                    alignItems="center"
-                    px={6}
-                    py={3}
-                    bg="gray.900"
-                    borderRadius={16}
-                  >
-                    <Icon as={StarIcon} h={6} w={6} color="white" />
-                    <chakra.h1
-                      mx={3}
-                      color="white"
-                      fontWeight="bold"
-                      fontSize="lg"
-                    >
-                      {data.data.name}
-                    </chakra.h1>
-                  </Flex>
-                </Box>
-                <Box py={4} px={6}>
-                  <Flex
-                    alignItems="center"
-                    mt={4}
-                    color={useColorModeValue('gray.700', 'gray.200')}
-                  >
-                    <Icon as={MdReceipt} h={6} w={6} mr={2} />
-
-                    <chakra.h1 px={2} fontSize="lg">
-                      Reward Hold: $ {reward}
-                    </chakra.h1>
-                  </Flex>
-                  <Flex
-                    alignItems="center"
-                    mt={4}
-                    color={useColorModeValue('gray.700', 'gray.200')}
-                  >
-                    <Icon as={MdReceipt} h={6} w={6} mr={2} />
-
-                    <chakra.h1 px={2} fontSize="lg">
-                      Reward Released: $ {released}
-                    </chakra.h1>
-                  </Flex>
-                  <Flex
-                    alignItems="center"
-                    mt={4}
-                    color={useColorModeValue('gray.700', 'gray.200')}
-                  >
-                    <Icon as={BellIcon} h={6} w={6} mr={2} />
-
-                    <chakra.h1 px={2} fontSize="lg">
-                      NFT Created at: {time}
-                    </chakra.h1>
-                  </Flex>
-                </Box>
-              </ModalBody>
-              <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
-                </Button>
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  onClick={() => claimReward()}
-                >
-                  Claim Reward
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-        </>
-      )}
+              Claim Reward
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }

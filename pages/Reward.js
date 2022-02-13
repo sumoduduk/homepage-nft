@@ -18,7 +18,7 @@ import Section from '../components/section'
 import Card from '../components/card'
 
 const Reward = () => {
-  const [profit, setProfit] = useState(0)
+  const [profit, setProfit] = useState('')
   const [profitReleased, setProfitReleased] = useState('')
 
     async function getSign() {
@@ -61,6 +61,14 @@ const Reward = () => {
     setProfitReleased(dollar)
   }
 
+  async function claimAll() {
+    const sign = await getSign()
+    const addr = sign.getAddress()
+
+    const nftContract = new ethers.Contract(NFTAddress, nftABI.abi, sign)
+    const claim = await nftContract.claimRewardPerAddress(addr)
+  }
+
   return (
     <Layout title="Reward">
       <Section delay={0.5}>
@@ -73,13 +81,9 @@ const Reward = () => {
             <Divider />
             <VStack>
               <li>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/><Card/>
-                <Card/>
+                <Card title='Pending Reward Owned' label={profit} method={getProfit} scMethod={claimAll} scButtonName='Claim All Reward'/>
+                <Card title='Total Reward Claimed' label={profitReleased} method={getReleased}/>
               </li>
-                
               </VStack>            
           </Container>
         </Flex>
