@@ -13,10 +13,12 @@ import Web3Modal from 'web3modal'
 import Section from '../components/section'
 import { nftABI } from '../lib/abi'
 import { NFTAddress } from '../lib/contract'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 
 const Dashboard = () => {
   const [supply, setSupply] = useState('')
+  const [signer, setSigner] = useState(undefined)
+  const [provider, setProvider] = useState(undefined)
 
   // useEffect(() => {
   //   ;(async () => {
@@ -30,11 +32,30 @@ const Dashboard = () => {
   //   })()
   // }, [])
 
+  const contractInit = useMemo(() => {
+    if (!provider && !signer) return
+
+    return new ethers.Contract(NFTAddress, nftABI.abi, signer)
+  }, [provider, signer])
+
+  useEffect(() => {
+    console.log(contractInit)
+    if (!contractInit) return
+    ;(async () => {
+      const getSupply = await contractInit.totalSupply()
+      setSupply(getSupply.toNumber())
+    })()
+  }, [contractInit])
+
   return (
     <Layout title="Dashboard">
       <Section delay={0.5}>
         <Flex>
-          <Sidebar />
+          <Sidebar
+            title="Dashboard"
+            setSigner={setSigner}
+            setProvider={setProvider}
+          />
           <Container maxW="full">
             <Box my={8} position="fixed">
               <Heading>{supply}</Heading>

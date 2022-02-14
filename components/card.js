@@ -1,10 +1,7 @@
 import {
-  Badge,
   Box,
   Button,
   Center,
-  CircularProgress,
-  CircularProgressLabel,
   Heading,
   Stack,
   Text,
@@ -12,16 +9,18 @@ import {
   useColorModeValue,
   useToast
 } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
 import React, { Fragment, useCallback, useMemo, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
+import { MotionBox } from './motion'
 
-const MotionBox = motion(Box)
-
-export default function Card({ title, label, method, scMethod, scButtonName }) {
-  const toast = useToast()
-  const progress = useMemo(() => Math.floor(Math.random() * (100 - 1)) + 1, [])
-
+export default function Card({
+  title,
+  label,
+  method,
+  visible,
+  scMethod,
+  scButtonName
+}) {
   const cardRef = useRef()
   const [inViewRef, inView, entry] = useInView({
     threshold: 0.25,
@@ -64,16 +63,17 @@ export default function Card({ title, label, method, scMethod, scButtonName }) {
           }}
           onClick={scrollToCard}
         >
-          <Box
+          <MotionBox
             boxShadow={useColorModeValue(
               '1px 1px 8px gray',
               '1px 1px 8px skyblue'
             )}
             borderRadius={20}
             m={4}
+            animate={{ scale: visible ? 1 : 0 }}
           >
             <Heading p={1}>$ {label}</Heading>
-          </Box>
+          </MotionBox>
           <Heading fontSize={'2xl'} fontFamily={'body'}>
             {title}
           </Heading>

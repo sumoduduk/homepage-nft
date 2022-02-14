@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import Layout from '../components/layouts/article'
 import Web3Modal from 'web3modal'
 import {ethers} from 'ethers'
@@ -20,6 +20,13 @@ import Card from '../components/card'
 const Reward = () => {
   const [profit, setProfit] = useState('')
   const [profitReleased, setProfitReleased] = useState('')
+  const [pvisible, setPvisible] = useState(false)
+  const [rvisible, setRvisible] = useState(false)
+  const [addr, setAddress] = useState('')
+  const [chain, setChain] = useState('')
+  const [signer, setSigner] = useState(undefined)
+  const [provider, setProvider] = useState(undefined)
+
 
     async function getSign() {
       const web3Modal = new Web3Modal()
@@ -39,7 +46,7 @@ const Reward = () => {
     }
 
 
-  async function getProfit() {
+  const getProfit = useCallback(async() =>  {
     const sign =  await getSign()
     const addr = sign?.getAddress()
 
@@ -48,9 +55,10 @@ const Reward = () => {
     const dollar = currency(ethers.utils.commify(ethers.utils.formatEther(_profit)))
     setProfit(dollar)
     console.log(dollar)
-  }
+    setPvisible(true)
+  }, [])
 
-  async function getReleased() {
+  const getReleased = useCallback(async () => {
     const sign = await getSign()
     const addr = sign?.getAddress()
 
@@ -59,31 +67,33 @@ const Reward = () => {
     const dollar = currency(ethers.utils.commify(ethers.utils.formatEther(_profit)))
     
     setProfitReleased(dollar)
-  }
+    setRvisible(true)
+  }, []) 
 
-  async function claimAll() {
+  const claimAll = useCallback(async() => {
     const sign = await getSign()
     const addr = sign.getAddress()
 
     const nftContract = new ethers.Contract(NFTAddress, nftABI.abi, sign)
     const claim = await nftContract.claimRewardPerAddress(addr)
-  }
+  } , []) 
 
   return (
     <Layout title="Reward">
       <Section delay={0.5}>
         <Flex>
-          <Sidebar />
+          <Sidebar  title="Reward" pAddress={setAddress}
+            pChain={setChain}
+            setSigner={setSigner}
+            setProvider={setProvider}/>
           <Container maxW="full">
             <Box my={8}>
               <Heading>Reward</Heading>
             </Box>
             <Divider />
             <VStack>
-              <li>
-                <Card title='Pending Reward Owned' label={profit} method={getProfit} scMethod={claimAll} scButtonName='Claim All Reward'/>
-                <Card title='Total Reward Claimed' label={profitReleased} method={getReleased}/>
-              </li>
+                <Card title='Pending Reward Owned' label={profit} method={getProfit} visible={pvisible} scMethod={claimAll} scButtonName='Claim All Reward'/>
+                <Card title='Total Reward Claimed' label={profitReleased} method={getReleased} visible={rvisible}/>
               </VStack>            
           </Container>
         </Flex>

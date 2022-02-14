@@ -47,7 +47,7 @@ const Mint = () => {
   return (
     <Layout title="Mint">
       <Flex>
-        <Sidebar />
+        <Sidebar title="Mint" />
 
         <Container maxW="full">
           <Section delay={0.4}>

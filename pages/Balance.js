@@ -76,7 +76,7 @@ const Balance = () => {
     <Layout title="Collection">
       <Section delay={0.5}>
         <Flex>
-          <Sidebar />
+          <Sidebar title="Collection" />
           <Container maxW="full">
             <Box my={8}>
               <Heading>NFT</Heading>

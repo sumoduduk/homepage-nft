@@ -40,12 +40,16 @@ const providerOptions = {
 
 const Login = () => {
   const login = async () => {
-    const init = new Web3Modal({ cacheProvider: false, providerOptions })
+    try {
+      const init = new Web3Modal({ cacheProvider: false, providerOptions })
 
-    const connection = await init.connect()
+      const connection = await init.connect()
 
-    const provider = new ethers.providers.Web3Provider(connection)
-    router.push('/Dashboard')
+      const provider = new ethers.providers.Web3Provider(connection)
+      router.push('/Dashboard')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

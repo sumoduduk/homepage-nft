@@ -6,7 +6,8 @@ import {
   Link,
   Menu,
   MenuButton,
-  MenuList
+  MenuList,
+  Button
 } from '@chakra-ui/react'
 import NavHoverBox from './NavHoverBox'
 import NextLink from 'next/link'
@@ -18,7 +19,8 @@ export default function NavItem({
   href,
   path,
   navSize,
-  active
+  active,
+  select
 }) {
   return (
     <Flex
