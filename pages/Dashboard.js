@@ -14,11 +14,11 @@ import Section from '../components/section'
 import { nftABI } from '../lib/abi'
 import { NFTAddress } from '../lib/contract'
 import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useRecoilValue } from 'recoil'
+import { providers } from '../components/data'
 
 const Dashboard = () => {
   const [supply, setSupply] = useState('')
-  const [signer, setSigner] = useState(undefined)
-  const [provider, setProvider] = useState(undefined)
 
   // useEffect(() => {
   //   ;(async () => {
@@ -32,30 +32,29 @@ const Dashboard = () => {
   //   })()
   // }, [])
 
-  const contractInit = useMemo(() => {
-    if (!provider && !signer) return
-
-    return new ethers.Contract(NFTAddress, nftABI.abi, signer)
-  }, [provider, signer])
+  const contractInit = useCallback(async () => {
+    const web3Modal = new Web3Modal()
+    const connection = await web3Modal.connect()
+    const provider = new ethers.providers.Web3Provider(connection)
+    const signer = provider.getSigner()
+    const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
+    try {
+      const getSupply = await contract.totalSupply()
+      setSupply(getSupply.toNumber())
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
 
   useEffect(() => {
-    console.log(contractInit)
-    if (!contractInit) return
-    ;(async () => {
-      const getSupply = await contractInit.totalSupply()
-      setSupply(getSupply.toNumber())
-    })()
-  }, [contractInit])
-
+    contractInit()
+    console.log(supply)
+  }, [supply])
   return (
     <Layout title="Dashboard">
       <Section delay={0.5}>
         <Flex>
-          <Sidebar
-            title="Dashboard"
-            setSigner={setSigner}
-            setProvider={setProvider}
-          />
+          <Sidebar title="Dashboard" />
           <Container maxW="full">
             <Box my={8} position="fixed">
               <Heading>{supply}</Heading>

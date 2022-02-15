@@ -45,7 +45,7 @@ const NftModal = ({
     const signer = provider.getSigner()
     const contract = new ethers.Contract(NFTAddress, nftABI.abi, signer)
 
-    const claim = await contract.claimRewardPerNft(nftId)
+    const claim = await contract.estimateGas.claimRewardPerNft(nftId)
     await claim.wait()
     render(`reward succesfully claimed`)
     onClose()

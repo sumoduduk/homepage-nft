@@ -23,6 +23,8 @@ import { ethers } from 'ethers'
 import { MotionFlex, MotionHeader, MotionText } from '../motion'
 import { AnimatePresence } from 'framer-motion'
 import { AvaxLogo, PolygonLogo, BSCLogo, ETHLogo } from '../logos'
+import { useRecoilState } from 'recoil'
+import { address, chains } from '../data'
 
 export const Chains = [
   {
@@ -87,13 +89,15 @@ export const Chains = [
   }
 ]
 
-export default function Sidebar({ title, setProvider, setSigner }) {
+export default function Sidebar({ title }) {
   const [select, setSelect] = useState(title)
 
   const [navSize, changeNavSize] = useState('large')
 
-  const [addr, setAddress] = useState('')
-  const [chain, setChain] = useState('')
+  const [addr, setAddress] = useRecoilState(address)
+  const [chain, setChain] = useRecoilState(chains)
+
+  const [chainNames, setChainNames] = useState('')
   const [logo, setLogo] = useState(null)
 
   const subscribeProvider = async connection => {
@@ -107,7 +111,7 @@ export default function Sidebar({ title, setProvider, setSigner }) {
       router.reload()
     })
     connection.on('chainChanged', async chainId => {
-      chainName(chainId)
+      setChain(chainId)
       router.reload()
     })
     connection.on('disconnect', async () => {
@@ -118,9 +122,10 @@ export default function Sidebar({ title, setProvider, setSigner }) {
   }
 
   const chainName = props => {
+    if (!props) return
     const selectChain = Chains.find(item => item.key === `0x${props}`)
 
-    setChain(selectChain.value)
+    setChainNames(selectChain.value)
     setLogo(selectChain.icon)
   }
 
@@ -129,25 +134,22 @@ export default function Sidebar({ title, setProvider, setSigner }) {
       const web3Modal = new Web3Modal()
       const connection = await web3Modal.connect()
       const provider = new ethers.providers.Web3Provider(connection)
-      setProvider(provider)
       const signer = provider.getSigner()
-      setSigner(signer)
       const userAddr = await signer.getAddress()
       setAddress(userAddr)
       const chains = await signer.getChainId()
-      chainName(chains)
+      setChain(chains)
 
       await subscribeProvider(connection)
+      chainName(chain)
     } catch (error) {
       console.log(error)
-      return router.push('/login')
     }
-  }, [])
+  }, [addr, chain])
 
   useEffect(() => {
     userChain()
-    addr ?? router.push('/login')
-  }, [addr, chain])
+  }, [])
 
   function logOut() {
     const web3Modal = new Web3Modal()
@@ -265,7 +267,7 @@ export default function Sidebar({ title, setProvider, setSigner }) {
             <Flex mb={4}>
               {logo}
               <Text align="center" isTruncated ml={4} fontSize={18}>
-                {chain}
+                {chainNames}
               </Text>
             </Flex>
             <Button onClick={() => logOut()}>Log Out</Button>
