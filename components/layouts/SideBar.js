@@ -137,13 +137,14 @@ export default function Sidebar({ title }) {
       const signer = provider.getSigner()
       const userAddr = await signer.getAddress()
       setAddress(userAddr)
-      const chains = await signer.getChainId()
+      const chains = await signer.getChainId().then(ress => chainName(ress))
+
       setChain(chains)
 
       await subscribeProvider(connection)
-      chainName(chain)
     } catch (error) {
       console.log(error)
+      router.push('/login')
     }
   }, [addr, chain])
 

@@ -84,10 +84,10 @@ const Reward = () => {
       return claim
     }))
     const gas = total.reduce((a,c) => a + c)
-    const claims = await nftContract.estimateGas.claimRewardPerAddress(addresses, {
-      gasLimit: gas
-    })
-    console.log(claims)
+    const claims = await nftContract.claimRewardPerAddress(addresses)
+    const tx = await claims.wait()
+    console.log(tx)
+    await getProfit()
   }
 
   return (

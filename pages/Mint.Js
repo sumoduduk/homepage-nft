@@ -25,8 +25,8 @@ const Mint = () => {
   const provider = new ethers.providers.JsonRpcProvider(
     'https://speedy-nodes-nyc.moralis.io/6392f177bd4334ce5a07629e/eth/goerli'
   )
-  const url =
-    'https://ipfs.moralis.io:2053/ipfs/QmSeGEb6y5dHbXvk2zV4M1rws77C4dDXFZvmdYgDrMjq7k'
+  // const url =
+  //   'https://ipfs.moralis.io:2053/ipfs/QmSeGEb6y5dHbXvk2zV4M1rws77C4dDXFZvmdYgDrMjq7k'
 
   const buy = async () => {
     const amounts = BigNumber.from(amount)
@@ -97,11 +97,16 @@ const Mint = () => {
                 borderRadius={18}
               >
                 <Box pt={12}>
-                  <IconButton
-                    m={6}
-                    icon={<MinusIcon />}
-                    onClick={() => setAmount(amount - 1)}
-                  />
+                  <div>
+                    <button className="relative border-0 bg-transparent p-0 cursor-pointer outline-offset-4 transition-300">
+                      <span className="absolute top-0 left-0 w-full h-full rounded-xl bg-stone-700 will-change-transform transform: translate-y-1/4 transition-transform" />
+                      <span className="absolute top-0 w-full h-100 rounded-xl bg-gradient-to-l from-red-400 to-red-800" />
+                      <span className="block relative px-3 py-10 rounded-xl text-xl ">
+                        -
+                      </span>
+                    </button>
+                  </div>
+
                   {amount}
                   <IconButton
                     m={6}
