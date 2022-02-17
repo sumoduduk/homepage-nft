@@ -13,7 +13,7 @@ import { useMoralis } from 'react-moralis'
 const Balance = () => {
   const [nfts, setNfts] = useState([])
   const [render, setRender] = useState(``)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState('not-loaded')
   const { Moralis } = useMoralis()
 
   function currency(numbers) {
@@ -27,7 +27,6 @@ const Balance = () => {
 
   useEffect(() => {
     loadAsset()
-    console.log(render)
   }, [render])
 
   async function loadAsset() {
@@ -83,7 +82,7 @@ const Balance = () => {
             </Box>
             <Divider />
             <Box my={12}>
-              <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+              <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 overflow-scroll max-h-screen">
                 {nfts.map((nft, i) => (
                   <NftModal
                     image={nft.image}

@@ -6,8 +6,7 @@ import {
   Stack,
   Text,
   useBreakpointValue,
-  useColorModeValue,
-  useToast
+  useColorModeValue
 } from '@chakra-ui/react'
 import React, { Fragment, useCallback, useMemo, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'

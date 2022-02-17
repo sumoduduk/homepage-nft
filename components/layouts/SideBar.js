@@ -92,7 +92,7 @@ export const Chains = [
 export default function Sidebar({ title }) {
   const [select, setSelect] = useState(title)
 
-  const [navSize, changeNavSize] = useState('large')
+  const [navSize, changeNavSize] = useState('small')
 
   const [addr, setAddress] = useRecoilState(address)
   const [chain, setChain] = useRecoilState(chains)

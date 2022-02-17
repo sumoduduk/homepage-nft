@@ -44,11 +44,23 @@ const Mint = () => {
     await transaction.wait()
   }
 
+  const minusClick = () => {
+    if (amount > 1) {
+      setAmount(amount - 1)
+    }
+    if (amount < 1) {
+      amount = 1
+    }
+  }
+
+  const plusClick = () => {
+    amount >= 20 ? 20 : setAmount(amount + 1)
+  }
+
   return (
     <Layout title="Mint">
       <Flex>
         <Sidebar title="Mint" />
-
         <Container maxW="full">
           <Section delay={0.4}>
             <Heading
@@ -96,25 +108,23 @@ const Mint = () => {
                 m={8}
                 borderRadius={18}
               >
-                <Box pt={12}>
-                  <div>
-                    <button className="relative border-0 bg-transparent p-0 cursor-pointer outline-offset-4 transition-300">
-                      <span className="absolute top-0 left-0 w-full h-full rounded-xl bg-stone-700 will-change-transform transform: translate-y-1/4 transition-transform" />
-                      <span className="absolute top-0 w-full h-100 rounded-xl bg-gradient-to-l from-red-400 to-red-800" />
-                      <span className="block relative px-3 py-10 rounded-xl text-xl ">
-                        -
-                      </span>
-                    </button>
-                  </div>
-
+                <Box pt={4}>
+                  <IconButton
+                    className="hover:translate-y-[-6px] hover:transition-transform active:translate-y-[2px] active:transition-transform-[34ms]"
+                    m={6}
+                    icon={<MinusIcon />}
+                    onClick={() => minusClick()}
+                  />
                   {amount}
                   <IconButton
+                    className="hover:translate-y-[-6px] hover:transition-transform active:translate-y-[2px] active:transition-transform-[34ms]"
                     m={6}
                     icon={<AddIcon />}
-                    onClick={() => setAmount(amount + 1)}
+                    onClick={() => plusClick()}
                   />
                 </Box>
                 <Button
+                  className="hover:translate-y-[-6px] hover:transition-transform active:translate-y-[2px] active:transition-transform-[34ms]"
                   boxShadow={useColorModeValue(
                     '1px 1px 8px gray',
                     '1px 1px 8px skyblue'
@@ -124,7 +134,7 @@ const Mint = () => {
                   onClick={() => buy()}
                   mb={8}
                 >
-                  <Heading size="xl">BUY</Heading>
+                  MINT
                 </Button>
               </Box>
             </Box>
