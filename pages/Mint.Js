@@ -15,7 +15,7 @@ import { ethers, BigNumber } from 'ethers'
 import Web3Modal from 'web3modal'
 import { nftABI } from '../lib/abi'
 import { NFTAddress } from '../lib/contract'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import Section from '../components/section'
 

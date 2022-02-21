@@ -4,8 +4,11 @@ import {
   Container,
   Divider,
   Flex,
-  Grid,
-  Heading
+  Text,
+  Spacer,
+  Wrap,
+  WrapItem,
+  Icon
 } from '@chakra-ui/react'
 import Sidebar from '../components/layouts/SideBar'
 import Layout from '../components/layouts/article'
@@ -16,13 +19,27 @@ import { nftABI } from '../lib/abi'
 import { NFTAddress } from '../lib/contract'
 import { useState, useEffect, useCallback } from 'react'
 import Cards from '../components/Card/index'
-import CardBody from '../components/Card/CardBody'
 import CardHeader from '../components/Card/CardHeader'
-import image from 'next/image'
-import cardDashboard from '../public/images/cardDashboard.png'
+import CardBody from '../components/Card/CardBody'
+import { address, chains } from '../components/data'
+import { useRecoilValue } from 'recoil'
+import { RiMastercardFill } from 'react-icons/ri'
+import { FaWallet } from 'react-icons/fa'
+import { ChainName } from '../components/chainName'
 
 const Dashboard = () => {
   const [supply, setSupply] = useState('')
+  const addr = useRecoilValue(address)
+  const chain = useRecoilValue(chains)
+  const [chainNames, setChainNames] = useState(null)
+  const [balance, setBalance] = useState(null)
+
+  const networkName = props => {
+    if (!props) return
+    const selectChain = ChainName.find(item => item.key === `0x${props}`)
+
+    setChainNames(selectChain.value)
+  }
 
   // useEffect(() => {
   //   ;(async () => {
@@ -45,75 +62,119 @@ const Dashboard = () => {
     try {
       const getSupply = await contract.totalSupply()
       setSupply(getSupply.toNumber())
+      const balances = await contract.yourNftTotal()
+      setBalance(balances.toNumber())
     } catch (err) {
       console.log(err)
     }
   }, [])
 
   useEffect(() => {
+    networkName(chain)
     contractInit()
     console.log(supply)
-  }, [supply])
+  }, [supply, chain])
   return (
     <Layout title="Dashboard">
       <Section delay={0.5}>
         <Flex>
           <Sidebar title="Dashboard" />
-          <Container maxW="full">
-            <Cards
-              backgroundImage={cardDashboard}
-              backgroundRepeat="no-repeat"
-              background="cover"
-              bgPosition="10%"
-              p="16px"
-              h={{ sm: '220px', xl: '100%' }}
-              gridArea={{ md: '1 / 1 / 2 / 3', xl: '1 / 1 / 2 / 3' }}
-            >
-              <CardBody h="100%" w="100%">
-                <Flex
-                  direction="column"
-                  color="white"
-                  h="100%"
-                  p="0px 10px 20px 10px"
-                  w="100%"
-                >
-                  <Flex justify="space-between" align="center">
-                    <Text fontSize="md" fontWeight="bold">
-                      Purity UI
-                    </Text>
-                    <Icon
-                      as={RiMastercardFill}
-                      w="48px"
-                      h="auto"
-                      color="gray.400"
-                    />
-                  </Flex>
-                  <Spacer />
-                  <Flex direction="column">
-                    <Box>
-                      <Text fontSize="xl" letterSpacing="2px" fontWeight="bold">
-                        7812 2139 0823 XXXX
+          <Wrap className=" pl-[100px]">
+            <WrapItem>
+              <Cards
+                className="h-[280px] rounded-xl"
+                backgroundImage='url("/images/cardDashboard.png")'
+                backgroundRepeat="no-repeat"
+                background="cover"
+                p="16px"
+                gridArea={{ md: '1 / 1 / 2 / 3', xl: '1 / 1 / 2 / 3' }}
+              >
+                <CardBody h="100%" w="100%">
+                  <Flex
+                    direction="column"
+                    color="white"
+                    h="100%"
+                    p="0px 10px 20px 10px"
+                    w="100%"
+                  >
+                    <Flex justify="space-between" align="center">
+                      <Text fontSize="md" fontWeight="bold">
+                        Holder Stat
                       </Text>
-                    </Box>
-                    <Flex mt="14px">
-                      <Flex direction="column" me="34px">
-                        <Text fontSize="xs">VALID THRU</Text>
-                        <Text fontSize="xs" fontWeight="bold">
-                          05/24
+                      <Icon
+                        as={RiMastercardFill}
+                        w="48px"
+                        h="auto"
+                        color="gray.400"
+                      />
+                    </Flex>
+                    <Spacer />
+                    <Flex direction="column">
+                      <Box mb={3}>
+                        <Text
+                          fontSize="xl"
+                          letterSpacing="2px"
+                          fontWeight="bold"
+                        >
+                          {addr}
                         </Text>
-                      </Flex>
-                      <Flex direction="column">
-                        <Text fontSize="xs">CVV</Text>
-                        <Text fontSize="xs" fontWeight="bold">
-                          09X
-                        </Text>
+                      </Box>
+                      <Flex mt="14px">
+                        <Flex direction="column" me="34px">
+                          <Text fontSize="xs">Your Total NFT</Text>
+                          <Text fontSize="md" fontWeight="bold" pl={6}>
+                            {balance}
+                          </Text>
+                        </Flex>
+                        <Spacer />
+                        <Flex direction="column" pr={4}>
+                          <Text fontSize="xs">Network</Text>
+                          <Text fontSize="md" fontWeight="bold" isTruncated>
+                            {chainNames}
+                          </Text>
+                        </Flex>
                       </Flex>
                     </Flex>
                   </Flex>
-                </Flex>
-              </CardBody>
-            </Cards>
-          </Container>
+                </CardBody>
+              </Cards>
+            </WrapItem>
+            <WrapItem>
+              <Cards p="16px" display="flex" align="center" justify="center">
+                <CardBody>
+                  <Flex direction="column" align="center" w="100%" py="14px">
+                    <IconBox as="box" h={'60px'} w={'60px'} bg={iconTeal}>
+                      <Icon h={'24px'} w={'24px'} color="white" as={FaWallet} />
+                    </IconBox>
+                    <Flex
+                      direction="column"
+                      m="14px"
+                      justify="center"
+                      textAlign="center"
+                      align="center"
+                      w="100%"
+                    >
+                      <Text fontSize="md" color={textColor} fontWeight="bold">
+                        Salary
+                      </Text>
+                      <Text
+                        mb="24px"
+                        fontSize="xs"
+                        color="gray.400"
+                        fontWeight="semibold"
+                      >
+                        Belong Interactive
+                      </Text>
+                      <Separator />
+                    </Flex>
+                    <Text fontSize="lg" color={textColor} fontWeight="bold">
+                      +$2000
+                    </Text>
+                  </Flex>
+                </CardBody>
+              </Cards>
+            </WrapItem>
+          </Wrap>
         </Flex>
       </Section>
     </Layout>

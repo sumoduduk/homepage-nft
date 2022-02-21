@@ -22,72 +22,9 @@ import Web3Modal from 'web3modal'
 import { ethers } from 'ethers'
 import { MotionFlex, MotionHeader, MotionText } from '../motion'
 import { AnimatePresence } from 'framer-motion'
-import { AvaxLogo, PolygonLogo, BSCLogo, ETHLogo } from '../logos'
 import { useRecoilState } from 'recoil'
 import { address, chains } from '../data'
-
-export const Chains = [
-  {
-    key: '0x1',
-    value: 'Ethereum',
-    icon: <ETHLogo />
-  },
-  {
-    key: '0x539',
-    value: 'Local Chain',
-    icon: <ETHLogo />
-  },
-  {
-    key: '0x3',
-    value: 'Ropsten Testnet',
-    icon: <ETHLogo />
-  },
-  {
-    key: '0x4',
-    value: 'Rinkeby Testnet',
-    icon: <ETHLogo />
-  },
-  {
-    key: '0x2a',
-    value: 'Kovan Testnet',
-    icon: <ETHLogo />
-  },
-  {
-    key: '0x5',
-    value: 'Goerli Testnet',
-    icon: <ETHLogo />
-  },
-  {
-    key: '0x38',
-    value: 'Binance',
-    icon: <BSCLogo />
-  },
-  {
-    key: '0x61',
-    value: 'Smart Chain Testnet',
-    icon: <BSCLogo />
-  },
-  {
-    key: '0x89',
-    value: 'Polygon',
-    icon: <PolygonLogo />
-  },
-  {
-    key: '0x13881',
-    value: 'Mumbai',
-    icon: <PolygonLogo />
-  },
-  {
-    key: '0xa86a',
-    value: 'Avalanche',
-    icon: <AvaxLogo />
-  },
-  {
-    key: '0xa869',
-    value: 'Avalanche Testnet',
-    icon: <AvaxLogo />
-  }
-]
+import { ChainName } from '../chainName'
 
 export default function Sidebar({ title }) {
   const [select, setSelect] = useState(title)
@@ -95,9 +32,9 @@ export default function Sidebar({ title }) {
   const [navSize, changeNavSize] = useState('small')
 
   const [addr, setAddress] = useRecoilState(address)
-  const [chain, setChain] = useRecoilState(chains)
+  const [chainz, setChain] = useRecoilState(chains)
 
-  const [chainNames, setChainNames] = useState('')
+  const [_chainNames, setChainNames] = useState('')
   const [logo, setLogo] = useState(null)
 
   const subscribeProvider = async connection => {
@@ -121,9 +58,9 @@ export default function Sidebar({ title }) {
     })
   }
 
-  const chainName = props => {
+  const chainNames = props => {
     if (!props) return
-    const selectChain = Chains.find(item => item.key === `0x${props}`)
+    const selectChain = ChainName.find(item => item.key === `0x${props}`)
 
     setChainNames(selectChain.value)
     setLogo(selectChain.icon)
@@ -137,8 +74,8 @@ export default function Sidebar({ title }) {
       const signer = provider.getSigner()
       const userAddr = await signer.getAddress()
       setAddress(userAddr)
-      const chains = await signer.getChainId().then(ress => chainName(ress))
-
+      const chains = await signer.getChainId()
+      chainNames(chains)
       setChain(chains)
 
       await subscribeProvider(connection)
@@ -146,10 +83,11 @@ export default function Sidebar({ title }) {
       console.log(error)
       router.push('/login')
     }
-  }, [addr, chain])
+  }, [addr, chainz])
 
   useEffect(() => {
     userChain()
+    console.log(chainz)
   }, [])
 
   function logOut() {
@@ -268,7 +206,7 @@ export default function Sidebar({ title }) {
             <Flex mb={4}>
               {logo}
               <Text align="center" isTruncated ml={4} fontSize={18}>
-                {chainNames}
+                {_chainNames}
               </Text>
             </Flex>
             <Button onClick={() => logOut()}>Log Out</Button>
